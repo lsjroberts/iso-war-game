@@ -1,0 +1,15 @@
+{
+    "version": "0.0.0",
+    "summary": "Isometric Cold War Game",
+    "repository": "https://github.com/lsjroberts/cold.git",
+    "license": "closed",
+    "source-directories": [
+        "./src"
+    ],
+    "exposed-modules": [],
+    "dependencies": {
+        "elm-lang/core": "1.0.0 <= v < 2.0.0",
+        "jcollard/elm-playground": "1.0.3 <= v < 2.0.0",
+        "johnpmayer/elm-linear-algebra": "1.0.0 <= v < 2.0.0"
+    }
+}
