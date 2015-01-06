@@ -25,7 +25,7 @@ nearWindowEdge (w,h) (x,y) =
 
 nearWindowEdgeSide : Float -> Float -> Float
 nearWindowEdgeSide dim pos =
-    let spacing = 100
+    let spacing = 20
         diff = dim - pos
     in if | diff < spacing -> 1 - diff / spacing
           | pos < spacing  -> pos / spacing - 1

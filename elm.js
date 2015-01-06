@@ -1653,7 +1653,7 @@ Elm.Input.make = function (_elm) {
    pos) {
       return function () {
          var diff = dim - pos;
-         var spacing = 100;
+         var spacing = 20;
          return _U.cmp(diff,
          spacing) < 0 ? 1 - diff / spacing : _U.cmp(pos,
          spacing) < 0 ? pos / spacing - 1 : 0;
@@ -2061,6 +2061,7 @@ Elm.Model.make = function (_elm) {
    _L = _N.List.make(_elm),
    _P = _N.Ports.make(_elm),
    $moduleName = "Model",
+   $Basics = Elm.Basics.make(_elm),
    $World$Model = Elm.World.Model.make(_elm);
    var GameState = F3(function (a,
    b,
@@ -2072,15 +2073,28 @@ Elm.Model.make = function (_elm) {
    });
    var Pause = {ctor: "Pause"};
    var Play = {ctor: "Play"};
-   var defaultGame = {_: {}
-                     ,offset: {ctor: "_Tuple2"
-                              ,_0: 0
-                              ,_1: 0}
-                     ,state: Play
-                     ,world: A3($World$Model.generate,
-                     20,
-                     20,
-                     1)};
+   var defaultGame = function () {
+      var seed = 1;
+      return {_: {}
+             ,offset: {ctor: "_Tuple2"
+                      ,_0: 0
+                      ,_1: 0}
+             ,state: Play
+             ,world: A2($World$Model.featureHill,
+             _L.fromArray([{ctor: "_Tuple2"
+                           ,_0: 0
+                           ,_1: 0}
+                          ,{ctor: "_Tuple2",_0: 1,_1: 1}
+                          ,{ctor: "_Tuple2",_0: 2,_1: 2}
+                          ,{ctor: "_Tuple2"
+                           ,_0: 3
+                           ,_1: 2}]),
+             seed)(A4($World$Model.filled,
+             $World$Model.GrassTile,
+             20,
+             20,
+             seed))};
+   }();
    _elm.Model.values = {_op: _op
                        ,Play: Play
                        ,Pause: Pause
@@ -5665,16 +5679,43 @@ Elm.World.Assets.make = function (_elm) {
    $World$Model = Elm.World.Model.make(_elm);
    var tiles = {_: {}
                ,dirt: "/assets/world/tiles/landscapeTiles_073.png"
-               ,grass: "/assets/world/tiles/landscapeTiles_067.png"};
+               ,grass: "/assets/world/tiles/landscapeTiles_067.png"
+               ,hillE: "/assets/world/tiles/landscapeTiles_106.png"
+               ,hillN: "/assets/world/tiles/landscapeTiles_099.png"
+               ,hillNE: "/assets/world/tiles/landscapeTiles_029.png"
+               ,hillNW: "/assets/world/tiles/landscapeTiles_021.png"
+               ,hillS: "/assets/world/tiles/landscapeTiles_098.png"
+               ,hillSE: "/assets/world/tiles/landscapeTiles_036.png"
+               ,hillSW: "/assets/world/tiles/landscapeTiles_028.png"
+               ,hillTop: "/assets/world/tiles/landscapeTiles_075.png"
+               ,hillW: "/assets/world/tiles/landscapeTiles_091.png"};
    var getTileImageSrc = function (tileType) {
       return function () {
          switch (tileType.ctor)
          {case "DirtTile":
             return tiles.dirt;
             case "GrassTile":
-            return tiles.grass;}
+            return tiles.grass;
+            case "HillETile":
+            return tiles.hillE;
+            case "HillNETile":
+            return tiles.hillNE;
+            case "HillNTile":
+            return tiles.hillN;
+            case "HillNWTile":
+            return tiles.hillNW;
+            case "HillSETile":
+            return tiles.hillSE;
+            case "HillSTile":
+            return tiles.hillS;
+            case "HillSWTile":
+            return tiles.hillSW;
+            case "HillTopTile":
+            return tiles.hillTop;
+            case "HillWTile":
+            return tiles.hillW;}
          _U.badCase($moduleName,
-         "between lines 12 and 14");
+         "between lines 22 and 33");
       }();
    };
    _elm.World.Assets.values = {_op: _op
@@ -5703,14 +5744,18 @@ Elm.World.Display.make = function (_elm) {
    $Model = Elm.Model.make(_elm),
    $World$Assets = Elm.World.Assets.make(_elm),
    $World$Model = Elm.World.Model.make(_elm);
+   var sortTiles = function (world) {
+      return world;
+   };
+   var zoom = 0.5;
    var translatePos = function (_v0) {
       return function () {
          return function () {
             var z$ = $Basics.toFloat(_v0.z);
             var y$ = $Basics.toFloat(_v0.y);
             var x$ = $Basics.toFloat(_v0.x);
-            var h = -64 / 2;
-            var w = 129 / 2;
+            var h = -64 * zoom / 2;
+            var w = 129 * zoom / 2;
             return {ctor: "_Tuple2"
                    ,_0: x$ * w + y$ * w
                    ,_1: y$ * h - x$ * h + z$ * 16};
@@ -5727,8 +5772,8 @@ Elm.World.Display.make = function (_elm) {
             return $Graphics$Collage.move({ctor: "_Tuple2"
                                           ,_0: x
                                           ,_1: y})($Graphics$Collage.toForm(A3($Graphics$Element.image,
-            131,
-            131,
+            $Basics.floor(131 * zoom),
+            $Basics.floor(131 * zoom),
             src)));
          }();
       }();
@@ -5745,9 +5790,6 @@ Elm.World.Display.make = function (_elm) {
          })(_v6.tiles);
       }();
    };
-   var sortTiles = function (world) {
-      return world;
-   };
    var display = F2(function (_v8,
    _v9) {
       return function () {
@@ -5756,7 +5798,7 @@ Elm.World.Display.make = function (_elm) {
             {case "_Tuple2":
                return displayTiles(sortTiles(_v9.world));}
             _U.badCase($moduleName,
-            "between lines 43 and 44");
+            "between lines 46 and 47");
          }();
       }();
    });
@@ -5780,33 +5822,51 @@ Elm.World.Model.make = function (_elm) {
    $moduleName = "World.Model",
    $Basics = Elm.Basics.make(_elm),
    $List = Elm.List.make(_elm);
-   var featureRiver = F5(function (_v0,
-   _v1,
-   width,
+   var featureRiver = F3(function (points,
    seed,
-   tiles) {
-      return function () {
-         switch (_v1.ctor)
-         {case "_Tuple2":
-            return function () {
-                 switch (_v0.ctor)
-                 {case "_Tuple2": return tiles;}
-                 _U.badCase($moduleName,
-                 "on line 43, column 5 to 10");
-              }();}
-         _U.badCase($moduleName,
-         "on line 43, column 5 to 10");
-      }();
+   world) {
+      return world;
    });
-   var featureHill = F4(function (_v8,
-   size,
+   var featureHill = F3(function (points,
    seed,
-   tiles) {
+   world) {
+      return world;
+   });
+   var tile = F5(function (tileType,
+   seed,
+   i,
+   j,
+   k) {
+      return {_: {}
+             ,pos: {_: {},x: i,y: j,z: k}
+             ,tileType: tileType};
+   });
+   var row = F4(function (tileType,
+   h,
+   seed,
+   i) {
+      return $List.reverse($List.map(function (j) {
+         return A5(tile,
+         tileType,
+         seed,
+         i,
+         j,
+         0);
+      })(_L.range(1,h)));
+   });
+   var filled = F4(function (tileType,
+   w,
+   h,
+   seed) {
       return function () {
-         switch (_v8.ctor)
-         {case "_Tuple2": return tiles;}
-         _U.badCase($moduleName,
-         "on line 39, column 5 to 10");
+         var tiles = $List.reverse($List.concatMap(function (i) {
+            return A4(row,
+            tileType,
+            h,
+            seed,
+            i);
+         })(_L.range(1,w)));
+         return {_: {},tiles: tiles};
       }();
    });
    var World = function (a) {
@@ -5825,88 +5885,36 @@ Elm.World.Model.make = function (_elm) {
              ,y: b
              ,z: c};
    });
+   var HillNWTile = {ctor: "HillNWTile"};
+   var HillWTile = {ctor: "HillWTile"};
+   var HillSWTile = {ctor: "HillSWTile"};
+   var HillSTile = {ctor: "HillSTile"};
+   var HillSETile = {ctor: "HillSETile"};
+   var HillETile = {ctor: "HillETile"};
+   var HillNETile = {ctor: "HillNETile"};
+   var HillNTile = {ctor: "HillNTile"};
+   var HillTopTile = {ctor: "HillTopTile"};
    var DirtTile = {ctor: "DirtTile"};
    var GrassTile = {ctor: "GrassTile"};
-   var generateTile = F3(function (seed,
-   i,
-   j) {
-      return {_: {}
-             ,pos: {_: {},x: i,y: j,z: 0}
-             ,tileType: GrassTile};
-   });
-   var generateRow = F3(function (h,
-   seed,
-   i) {
-      return $List.reverse($List.map(function (j) {
-         return A3(generateTile,
-         seed,
-         i,
-         j);
-      })(_L.range(1,h)));
-   });
-   var generate = F3(function (w,
-   h,
-   seed) {
-      return function () {
-         var tiles = $List.reverse($List.concatMap(function (i) {
-            return A3(generateRow,
-            h,
-            seed,
-            i);
-         })(_L.range(1,w)));
-         return {_: {},tiles: tiles};
-      }();
-   });
-   var demo = function () {
-      var tiles = _L.fromArray([{_: {}
-                                ,pos: {_: {},x: 2,y: 0,z: 0}
-                                ,tileType: GrassTile}
-                               ,{_: {}
-                                ,pos: {_: {},x: 1,y: 0,z: 0}
-                                ,tileType: DirtTile}
-                               ,{_: {}
-                                ,pos: {_: {},x: 0,y: 0,z: 0}
-                                ,tileType: GrassTile}
-                               ,{_: {}
-                                ,pos: {_: {},x: -1,y: 0,z: 0}
-                                ,tileType: DirtTile}
-                               ,{_: {}
-                                ,pos: {_: {},x: -2,y: 0,z: 0}
-                                ,tileType: GrassTile}
-                               ,{_: {}
-                                ,pos: {_: {},x: -3,y: 0,z: 0}
-                                ,tileType: GrassTile}
-                               ,{_: {}
-                                ,pos: {_: {},x: 2,y: 1,z: 0}
-                                ,tileType: DirtTile}
-                               ,{_: {}
-                                ,pos: {_: {},x: 1,y: 1,z: 0}
-                                ,tileType: DirtTile}
-                               ,{_: {}
-                                ,pos: {_: {},x: 0,y: 1,z: 1}
-                                ,tileType: GrassTile}
-                               ,{_: {}
-                                ,pos: {_: {},x: -1,y: 1,z: 0}
-                                ,tileType: GrassTile}
-                               ,{_: {}
-                                ,pos: {_: {},x: -2,y: 1,z: 0}
-                                ,tileType: DirtTile}
-                               ,{_: {}
-                                ,pos: {_: {},x: -3,y: 1,z: 0}
-                                ,tileType: DirtTile}]);
-      return {_: {},tiles: tiles};
-   }();
    _elm.World.Model.values = {_op: _op
                              ,GrassTile: GrassTile
                              ,DirtTile: DirtTile
+                             ,HillTopTile: HillTopTile
+                             ,HillNTile: HillNTile
+                             ,HillNETile: HillNETile
+                             ,HillETile: HillETile
+                             ,HillSETile: HillSETile
+                             ,HillSTile: HillSTile
+                             ,HillSWTile: HillSWTile
+                             ,HillWTile: HillWTile
+                             ,HillNWTile: HillNWTile
                              ,Position: Position
                              ,Tile: Tile
                              ,World: World
-                             ,generate: generate
-                             ,generateRow: generateRow
-                             ,generateTile: generateTile
+                             ,filled: filled
+                             ,row: row
+                             ,tile: tile
                              ,featureHill: featureHill
-                             ,featureRiver: featureRiver
-                             ,demo: demo};
+                             ,featureRiver: featureRiver};
    return _elm.World.Model.values;
 };

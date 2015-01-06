@@ -86,7 +86,9 @@ can be received on the current state.
 
 **Objectives:**
 
-1. [ ] Add city / building terrain generation
+1. [ ] Add city / building / road terrain generation
+2. [ ] Update unit movement to consider buildings and roads
+3. [ ] Update combat to consider buildings and roads
 
 
 ### Seven
@@ -97,7 +99,7 @@ can be received on the current state.
 
 **Objectives:**
 
-1. [ ] Add character UI
+1. [ ] Add placeholder character UI
 2. [ ] Add conversation mechanics
 
 

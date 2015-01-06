@@ -1,6 +1,6 @@
 module Model where
 
-import World.Model (World,demo,generate)
+import World.Model (..)
 
 type State =
     Play | Pause
@@ -15,6 +15,8 @@ type alias GameState =
 
 defaultGame : GameState
 defaultGame =
-    { state = Play
-    , world = generate 20 20 1
-    , offset = (0,0) }
+    let seed = 1
+    in { state = Play
+       , world = filled GrassTile 20 20 seed
+               |> featureHill [(0,0),(1,1),(2,2),(3,2)] seed
+       , offset = (0,0) }
