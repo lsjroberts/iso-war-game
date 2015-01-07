@@ -677,61 +677,547 @@ Elm.Display.make = function (_elm) {
    _P = _N.Ports.make(_elm),
    $moduleName = "Display",
    $Basics = Elm.Basics.make(_elm),
+   $Editor$Display = Elm.Editor.Display.make(_elm),
+   $Game$Display = Elm.Game.Display.make(_elm),
    $Graphics$Collage = Elm.Graphics.Collage.make(_elm),
    $Graphics$Element = Elm.Graphics.Element.make(_elm),
-   $Model = Elm.Model.make(_elm),
-   $World$Display = Elm.World.Display.make(_elm);
+   $Model = Elm.Model.make(_elm);
+   var display = F2(function (_v0,
+   _v1) {
+      return function () {
+         return function () {
+            switch (_v0.ctor)
+            {case "_Tuple2":
+               return function () {
+                    var forms = _U.eq(_v1.state,
+                    $Model.Play) ? A2($Game$Display.displayPlay,
+                    {ctor: "_Tuple2"
+                    ,_0: _v0._0
+                    ,_1: _v0._1},
+                    _v1) : _U.eq(_v1.state,
+                    $Model.Pause) ? A2($Game$Display.displayPause,
+                    {ctor: "_Tuple2"
+                    ,_0: _v0._0
+                    ,_1: _v0._1},
+                    _v1) : _U.eq(_v1.state,
+                    $Model.Editor) ? A2($Editor$Display.displayEditor,
+                    {ctor: "_Tuple2"
+                    ,_0: _v0._0
+                    ,_1: _v0._1},
+                    _v1) : _L.fromArray([]);
+                    return A3($Graphics$Element.container,
+                    _v0._0,
+                    _v0._1,
+                    $Graphics$Element.middle)(A3($Graphics$Collage.collage,
+                    _v0._0,
+                    _v0._1,
+                    forms));
+                 }();}
+            _U.badCase($moduleName,
+            "between lines 13 and 18");
+         }();
+      }();
+   });
+   _elm.Display.values = {_op: _op
+                         ,display: display};
+   return _elm.Display.values;
+};
+Elm.Editor = Elm.Editor || {};
+Elm.Editor.Display = Elm.Editor.Display || {};
+Elm.Editor.Display.make = function (_elm) {
+   "use strict";
+   _elm.Editor = _elm.Editor || {};
+   _elm.Editor.Display = _elm.Editor.Display || {};
+   if (_elm.Editor.Display.values)
+   return _elm.Editor.Display.values;
+   var _op = {},
+   _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   _P = _N.Ports.make(_elm),
+   $moduleName = "Editor.Display",
+   $Graphics$Collage = Elm.Graphics.Collage.make(_elm),
+   $Model = Elm.Model.make(_elm);
+   var displayEditor = F2(function (dimensions,
+   _v0) {
+      return function () {
+         return _L.fromArray([]);
+      }();
+   });
+   _elm.Editor.Display.values = {_op: _op
+                                ,displayEditor: displayEditor};
+   return _elm.Editor.Display.values;
+};
+Elm.Editor = Elm.Editor || {};
+Elm.Editor.Model = Elm.Editor.Model || {};
+Elm.Editor.Model.make = function (_elm) {
+   "use strict";
+   _elm.Editor = _elm.Editor || {};
+   _elm.Editor.Model = _elm.Editor.Model || {};
+   if (_elm.Editor.Model.values)
+   return _elm.Editor.Model.values;
+   var _op = {},
+   _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   _P = _N.Ports.make(_elm),
+   $moduleName = "Editor.Model";
+   var Editor = function (a) {
+      return {_: {},brush: a};
+   };
+   var River = {ctor: "River"};
+   var Elevation = {ctor: "Elevation"};
+   _elm.Editor.Model.values = {_op: _op
+                              ,Elevation: Elevation
+                              ,River: River
+                              ,Editor: Editor};
+   return _elm.Editor.Model.values;
+};
+Elm.Editor = Elm.Editor || {};
+Elm.Editor.Updates = Elm.Editor.Updates || {};
+Elm.Editor.Updates.make = function (_elm) {
+   "use strict";
+   _elm.Editor = _elm.Editor || {};
+   _elm.Editor.Updates = _elm.Editor.Updates || {};
+   if (_elm.Editor.Updates.values)
+   return _elm.Editor.Updates.values;
+   var _op = {},
+   _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   _P = _N.Ports.make(_elm),
+   $moduleName = "Editor.Updates",
+   $Basics = Elm.Basics.make(_elm),
+   $Editor$Model = Elm.Editor.Model.make(_elm),
+   $Input = Elm.Input.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Model = Elm.Model.make(_elm);
+   var stepBrush = F2(function (input,
+   _v0) {
+      return function () {
+         return _U.replace([["brush"
+                            ,_v0.brush]],
+         _v0);
+      }();
+   });
+   var stepEditor = F2(function (input,
+   _v2) {
+      return function () {
+         return _U.replace([["editor"
+                            ,function () {
+                               var _v4 = _v2.editor;
+                               switch (_v4.ctor)
+                               {case "Just":
+                                  return $Maybe.Just(stepBrush(input)(_v4._0));
+                                  case "Nothing":
+                                  return $Maybe.Nothing;}
+                               _U.badCase($moduleName,
+                               "between lines 10 and 14");
+                            }()]],
+         _v2);
+      }();
+   });
+   _elm.Editor.Updates.values = {_op: _op
+                                ,stepEditor: stepEditor};
+   return _elm.Editor.Updates.values;
+};
+Elm.Game = Elm.Game || {};
+Elm.Game.Display = Elm.Game.Display || {};
+Elm.Game.Display.make = function (_elm) {
+   "use strict";
+   _elm.Game = _elm.Game || {};
+   _elm.Game.Display = _elm.Game.Display || {};
+   if (_elm.Game.Display.values)
+   return _elm.Game.Display.values;
+   var _op = {},
+   _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   _P = _N.Ports.make(_elm),
+   $moduleName = "Game.Display",
+   $Basics = Elm.Basics.make(_elm),
+   $Game$Model = Elm.Game.Model.make(_elm),
+   $Game$World$Display = Elm.Game.World.Display.make(_elm),
+   $Graphics$Collage = Elm.Graphics.Collage.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Model = Elm.Model.make(_elm);
    var displayPause = F2(function (dimensions,
    gameState) {
       return _L.fromArray([]);
+   });
+   var displayGame = F3(function (dimensions,
+   offset,
+   game) {
+      return _L.fromArray([$Graphics$Collage.move(offset)($Graphics$Collage.group(A2($Game$World$Display.displayWorld,
+      dimensions,
+      game)))]);
    });
    var displayPlay = F2(function (dimensions,
    _v0) {
       return function () {
          return function () {
-            var displayed = _L.fromArray([$Graphics$Collage.move(_v0.offset)($Graphics$Collage.group(A2($World$Display.display,
-            dimensions,
-            _v0)))]);
-            return displayed;
+            var _v2 = _v0.game;
+            switch (_v2.ctor)
+            {case "Just":
+               return A2(displayGame,
+                 dimensions,
+                 _v0.offset)(_v2._0);
+               case "Nothing":
+               return _L.fromArray([]);}
+            _U.badCase($moduleName,
+            "between lines 11 and 13");
          }();
       }();
    });
-   var display = F2(function (_v2,
+   _elm.Game.Display.values = {_op: _op
+                              ,displayPlay: displayPlay
+                              ,displayPause: displayPause};
+   return _elm.Game.Display.values;
+};
+Elm.Game = Elm.Game || {};
+Elm.Game.Model = Elm.Game.Model || {};
+Elm.Game.Model.make = function (_elm) {
+   "use strict";
+   _elm.Game = _elm.Game || {};
+   _elm.Game.Model = _elm.Game.Model || {};
+   if (_elm.Game.Model.values)
+   return _elm.Game.Model.values;
+   var _op = {},
+   _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   _P = _N.Ports.make(_elm),
+   $moduleName = "Game.Model",
+   $Game$World$Model = Elm.Game.World.Model.make(_elm);
+   var Game = function (a) {
+      return {_: {},world: a};
+   };
+   _elm.Game.Model.values = {_op: _op
+                            ,Game: Game};
+   return _elm.Game.Model.values;
+};
+Elm.Game = Elm.Game || {};
+Elm.Game.Updates = Elm.Game.Updates || {};
+Elm.Game.Updates.make = function (_elm) {
+   "use strict";
+   _elm.Game = _elm.Game || {};
+   _elm.Game.Updates = _elm.Game.Updates || {};
+   if (_elm.Game.Updates.values)
+   return _elm.Game.Updates.values;
+   var _op = {},
+   _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   _P = _N.Ports.make(_elm),
+   $moduleName = "Game.Updates",
+   $Basics = Elm.Basics.make(_elm),
+   $Input = Elm.Input.make(_elm),
+   $Model = Elm.Model.make(_elm);
+   var stepPause = F2(function (_v0,
+   gameState) {
+      return function () {
+         return gameState;
+      }();
+   });
+   var stepOffset = F2(function (_v2,
    _v3) {
       return function () {
+         switch (_v3.ctor)
+         {case "_Tuple2":
+            return function () {
+                 return function () {
+                    var $ = _v2.userInput.scroll,
+                    x$ = $._0,
+                    y$ = $._1;
+                    return {ctor: "_Tuple2"
+                           ,_0: _v3._0 - x$ * 50
+                           ,_1: _v3._1 + y$ * 50};
+                 }();
+              }();}
+         _U.badCase($moduleName,
+         "between lines 13 and 15");
+      }();
+   });
+   var stepPlay = F2(function (_v8,
+   _v9) {
+      return function () {
          return function () {
-            switch (_v2.ctor)
-            {case "_Tuple2":
-               return function () {
-                    var forms = _U.eq(_v3.state,
-                    $Model.Play) ? A2(displayPlay,
-                    {ctor: "_Tuple2"
-                    ,_0: _v2._0
-                    ,_1: _v2._1},
-                    _v3) : _U.eq(_v3.state,
-                    $Model.Pause) ? A2(displayPause,
-                    {ctor: "_Tuple2"
-                    ,_0: _v2._0
-                    ,_1: _v2._1},
-                    _v3) : _L.fromArray([]);
-                    return A3($Graphics$Element.container,
-                    _v2._0,
-                    _v2._1,
-                    $Graphics$Element.middle)(A3($Graphics$Collage.collage,
-                    _v2._0,
-                    _v2._1,
-                    forms));
-                 }();}
-            _U.badCase($moduleName,
-            "between lines 12 and 16");
+            return function () {
+               var offset$ = stepOffset(_v8)(_v9.offset);
+               return _U.replace([["offset"
+                                  ,offset$]],
+               _v9);
+            }();
          }();
       }();
    });
-   _elm.Display.values = {_op: _op
-                         ,display: display
-                         ,displayPlay: displayPlay
-                         ,displayPause: displayPause};
-   return _elm.Display.values;
+   _elm.Game.Updates.values = {_op: _op
+                              ,stepPlay: stepPlay
+                              ,stepOffset: stepOffset
+                              ,stepPause: stepPause};
+   return _elm.Game.Updates.values;
+};
+Elm.Game = Elm.Game || {};
+Elm.Game.World = Elm.Game.World || {};
+Elm.Game.World.Assets = Elm.Game.World.Assets || {};
+Elm.Game.World.Assets.make = function (_elm) {
+   "use strict";
+   _elm.Game = _elm.Game || {};
+   _elm.Game.World = _elm.Game.World || {};
+   _elm.Game.World.Assets = _elm.Game.World.Assets || {};
+   if (_elm.Game.World.Assets.values)
+   return _elm.Game.World.Assets.values;
+   var _op = {},
+   _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   _P = _N.Ports.make(_elm),
+   $moduleName = "Game.World.Assets",
+   $Game$World$Model = Elm.Game.World.Model.make(_elm);
+   var tiles = {_: {}
+               ,dirt: "/assets/world/tiles/landscapeTiles_073.png"
+               ,grass: "/assets/world/tiles/landscapeTiles_067.png"
+               ,hillE: "/assets/world/tiles/landscapeTiles_106.png"
+               ,hillN: "/assets/world/tiles/landscapeTiles_099.png"
+               ,hillNE: "/assets/world/tiles/landscapeTiles_029.png"
+               ,hillNW: "/assets/world/tiles/landscapeTiles_021.png"
+               ,hillS: "/assets/world/tiles/landscapeTiles_098.png"
+               ,hillSE: "/assets/world/tiles/landscapeTiles_036.png"
+               ,hillSW: "/assets/world/tiles/landscapeTiles_028.png"
+               ,hillTop: "/assets/world/tiles/landscapeTiles_075.png"
+               ,hillW: "/assets/world/tiles/landscapeTiles_091.png"};
+   var getTileImageSrc = function (tileType) {
+      return function () {
+         switch (tileType.ctor)
+         {case "DirtTile":
+            return tiles.dirt;
+            case "GrassTile":
+            return tiles.grass;
+            case "HillETile":
+            return tiles.hillE;
+            case "HillNETile":
+            return tiles.hillNE;
+            case "HillNTile":
+            return tiles.hillN;
+            case "HillNWTile":
+            return tiles.hillNW;
+            case "HillSETile":
+            return tiles.hillSE;
+            case "HillSTile":
+            return tiles.hillS;
+            case "HillSWTile":
+            return tiles.hillSW;
+            case "HillTopTile":
+            return tiles.hillTop;
+            case "HillWTile":
+            return tiles.hillW;}
+         _U.badCase($moduleName,
+         "between lines 22 and 33");
+      }();
+   };
+   _elm.Game.World.Assets.values = {_op: _op
+                                   ,tiles: tiles
+                                   ,getTileImageSrc: getTileImageSrc};
+   return _elm.Game.World.Assets.values;
+};
+Elm.Game = Elm.Game || {};
+Elm.Game.World = Elm.Game.World || {};
+Elm.Game.World.Display = Elm.Game.World.Display || {};
+Elm.Game.World.Display.make = function (_elm) {
+   "use strict";
+   _elm.Game = _elm.Game || {};
+   _elm.Game.World = _elm.Game.World || {};
+   _elm.Game.World.Display = _elm.Game.World.Display || {};
+   if (_elm.Game.World.Display.values)
+   return _elm.Game.World.Display.values;
+   var _op = {},
+   _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   _P = _N.Ports.make(_elm),
+   $moduleName = "Game.World.Display",
+   $Basics = Elm.Basics.make(_elm),
+   $Game$Model = Elm.Game.Model.make(_elm),
+   $Game$World$Assets = Elm.Game.World.Assets.make(_elm),
+   $Game$World$Model = Elm.Game.World.Model.make(_elm),
+   $Graphics$Collage = Elm.Graphics.Collage.make(_elm),
+   $Graphics$Element = Elm.Graphics.Element.make(_elm),
+   $List = Elm.List.make(_elm);
+   var sortTiles = function (world) {
+      return world;
+   };
+   var zoom = 0.5;
+   var translatePos = function (_v0) {
+      return function () {
+         return function () {
+            var z$ = $Basics.toFloat(_v0.z);
+            var y$ = $Basics.toFloat(_v0.y);
+            var x$ = $Basics.toFloat(_v0.x);
+            var h = -64 * zoom / 2;
+            var w = 129 * zoom / 2;
+            return {ctor: "_Tuple2"
+                   ,_0: x$ * w + y$ * w
+                   ,_1: y$ * h - x$ * h + z$ * 16};
+         }();
+      }();
+   };
+   var getTileImage = F2(function (src,
+   _v2) {
+      return function () {
+         return function () {
+            var $ = translatePos(_v2.pos),
+            x = $._0,
+            y = $._1;
+            return $Graphics$Collage.move({ctor: "_Tuple2"
+                                          ,_0: x
+                                          ,_1: y})($Graphics$Collage.toForm(A3($Graphics$Element.image,
+            $Basics.floor(131 * zoom),
+            $Basics.floor(131 * zoom),
+            src)));
+         }();
+      }();
+   });
+   var displayTile = function (_v4) {
+      return function () {
+         return getTileImage($Game$World$Assets.getTileImageSrc(_v4.tileType))(_v4);
+      }();
+   };
+   var displayTiles = function (_v6) {
+      return function () {
+         return $List.map(function (t) {
+            return displayTile(t);
+         })(_v6.tiles);
+      }();
+   };
+   var displayWorld = F2(function (_v8,
+   _v9) {
+      return function () {
+         return function () {
+            switch (_v8.ctor)
+            {case "_Tuple2":
+               return displayTiles(sortTiles(_v9.world));}
+            _U.badCase($moduleName,
+            "between lines 46 and 47");
+         }();
+      }();
+   });
+   _elm.Game.World.Display.values = {_op: _op
+                                    ,displayWorld: displayWorld};
+   return _elm.Game.World.Display.values;
+};
+Elm.Game = Elm.Game || {};
+Elm.Game.World = Elm.Game.World || {};
+Elm.Game.World.Model = Elm.Game.World.Model || {};
+Elm.Game.World.Model.make = function (_elm) {
+   "use strict";
+   _elm.Game = _elm.Game || {};
+   _elm.Game.World = _elm.Game.World || {};
+   _elm.Game.World.Model = _elm.Game.World.Model || {};
+   if (_elm.Game.World.Model.values)
+   return _elm.Game.World.Model.values;
+   var _op = {},
+   _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   _P = _N.Ports.make(_elm),
+   $moduleName = "Game.World.Model",
+   $Basics = Elm.Basics.make(_elm),
+   $List = Elm.List.make(_elm);
+   var featureRiver = F3(function (points,
+   seed,
+   world) {
+      return world;
+   });
+   var featureHill = F3(function (points,
+   seed,
+   world) {
+      return world;
+   });
+   var tile = F5(function (tileType,
+   seed,
+   i,
+   j,
+   k) {
+      return {_: {}
+             ,pos: {_: {},x: i,y: j,z: k}
+             ,tileType: tileType};
+   });
+   var row = F4(function (tileType,
+   h,
+   seed,
+   i) {
+      return $List.reverse($List.map(function (j) {
+         return A5(tile,
+         tileType,
+         seed,
+         i,
+         j,
+         0);
+      })(_L.range(1,h)));
+   });
+   var filled = F4(function (tileType,
+   w,
+   h,
+   seed) {
+      return function () {
+         var tiles = $List.reverse($List.concatMap(function (i) {
+            return A4(row,
+            tileType,
+            h,
+            seed,
+            i);
+         })(_L.range(1,w)));
+         return {_: {},tiles: tiles};
+      }();
+   });
+   var World = function (a) {
+      return {_: {},tiles: a};
+   };
+   var Tile = F2(function (a,b) {
+      return {_: {}
+             ,pos: b
+             ,tileType: a};
+   });
+   var Position = F3(function (a,
+   b,
+   c) {
+      return {_: {}
+             ,x: a
+             ,y: b
+             ,z: c};
+   });
+   var HillNWTile = {ctor: "HillNWTile"};
+   var HillWTile = {ctor: "HillWTile"};
+   var HillSWTile = {ctor: "HillSWTile"};
+   var HillSTile = {ctor: "HillSTile"};
+   var HillSETile = {ctor: "HillSETile"};
+   var HillETile = {ctor: "HillETile"};
+   var HillNETile = {ctor: "HillNETile"};
+   var HillNTile = {ctor: "HillNTile"};
+   var HillTopTile = {ctor: "HillTopTile"};
+   var DirtTile = {ctor: "DirtTile"};
+   var GrassTile = {ctor: "GrassTile"};
+   _elm.Game.World.Model.values = {_op: _op
+                                  ,GrassTile: GrassTile
+                                  ,DirtTile: DirtTile
+                                  ,HillTopTile: HillTopTile
+                                  ,HillNTile: HillNTile
+                                  ,HillNETile: HillNETile
+                                  ,HillETile: HillETile
+                                  ,HillSETile: HillSETile
+                                  ,HillSTile: HillSTile
+                                  ,HillSWTile: HillSWTile
+                                  ,HillWTile: HillWTile
+                                  ,HillNWTile: HillNWTile
+                                  ,Position: Position
+                                  ,Tile: Tile
+                                  ,World: World
+                                  ,filled: filled
+                                  ,row: row
+                                  ,tile: tile
+                                  ,featureHill: featureHill
+                                  ,featureRiver: featureRiver};
+   return _elm.Game.World.Model.values;
 };
 Elm.Graphics = Elm.Graphics || {};
 Elm.Graphics.Collage = Elm.Graphics.Collage || {};
@@ -2061,43 +2547,33 @@ Elm.Model.make = function (_elm) {
    _L = _N.List.make(_elm),
    _P = _N.Ports.make(_elm),
    $moduleName = "Model",
-   $Basics = Elm.Basics.make(_elm),
-   $World$Model = Elm.World.Model.make(_elm);
-   var GameState = F3(function (a,
+   $Editor$Model = Elm.Editor.Model.make(_elm),
+   $Game$Model = Elm.Game.Model.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm);
+   var GameState = F4(function (a,
    b,
-   c) {
+   c,
+   d) {
       return {_: {}
-             ,offset: c
-             ,state: a
-             ,world: b};
+             ,editor: d
+             ,game: c
+             ,offset: b
+             ,state: a};
    });
+   var Editor = {ctor: "Editor"};
+   var defaultGame = {_: {}
+                     ,editor: $Maybe.Nothing
+                     ,game: $Maybe.Nothing
+                     ,offset: {ctor: "_Tuple2"
+                              ,_0: 0
+                              ,_1: 0}
+                     ,state: Editor};
    var Pause = {ctor: "Pause"};
    var Play = {ctor: "Play"};
-   var defaultGame = function () {
-      var seed = 1;
-      return {_: {}
-             ,offset: {ctor: "_Tuple2"
-                      ,_0: 0
-                      ,_1: 0}
-             ,state: Play
-             ,world: A2($World$Model.featureHill,
-             _L.fromArray([{ctor: "_Tuple2"
-                           ,_0: 0
-                           ,_1: 0}
-                          ,{ctor: "_Tuple2",_0: 1,_1: 1}
-                          ,{ctor: "_Tuple2",_0: 2,_1: 2}
-                          ,{ctor: "_Tuple2"
-                           ,_0: 3
-                           ,_1: 2}]),
-             seed)(A4($World$Model.filled,
-             $World$Model.GrassTile,
-             20,
-             20,
-             seed))};
-   }();
    _elm.Model.values = {_op: _op
                        ,Play: Play
                        ,Pause: Pause
+                       ,Editor: Editor
                        ,GameState: GameState
                        ,defaultGame: defaultGame};
    return _elm.Model.values;
@@ -5587,52 +6063,17 @@ Elm.Updates.make = function (_elm) {
    _P = _N.Ports.make(_elm),
    $moduleName = "Updates",
    $Basics = Elm.Basics.make(_elm),
+   $Editor$Updates = Elm.Editor.Updates.make(_elm),
+   $Game$Updates = Elm.Game.Updates.make(_elm),
    $Input = Elm.Input.make(_elm),
    $Model = Elm.Model.make(_elm);
-   var stepPause = F2(function (_v0,
-   gameState) {
-      return function () {
-         return gameState;
-      }();
-   });
-   var stepOffset = F2(function (_v2,
-   _v3) {
-      return function () {
-         switch (_v3.ctor)
-         {case "_Tuple2":
-            return function () {
-                 return function () {
-                    var $ = _v2.userInput.scroll,
-                    x$ = $._0,
-                    y$ = $._1;
-                    return {ctor: "_Tuple2"
-                           ,_0: _v3._0 - x$ * 50
-                           ,_1: _v3._1 + y$ * 50};
-                 }();
-              }();}
-         _U.badCase($moduleName,
-         "between lines 20 and 22");
-      }();
-   });
-   var stepPlay = F2(function (_v8,
-   _v9) {
-      return function () {
-         return function () {
-            return function () {
-               var offset$ = stepOffset(_v8)(_v9.offset);
-               return _U.replace([["offset"
-                                  ,offset$]],
-               _v9);
-            }();
-         }();
-      }();
-   });
    var step = F2(function (input,
-   _v12) {
+   _v0) {
       return function () {
-         return _U.eq(_v12.state,
-         $Model.Play) ? stepPlay(input)(_v12) : _U.eq(_v12.state,
-         $Model.Pause) ? stepPause(input)(_v12) : _v12;
+         return _U.eq(_v0.state,
+         $Model.Play) ? $Game$Updates.stepPlay(input)(_v0) : _U.eq(_v0.state,
+         $Model.Pause) ? $Game$Updates.stepPause(input)(_v0) : _U.eq(_v0.state,
+         $Model.Editor) ? $Editor$Updates.stepEditor(input)(_v0) : _v0;
       }();
    });
    _elm.Updates.values = {_op: _op
@@ -5661,260 +6102,4 @@ Elm.Window.make = function (_elm) {
                         ,width: width
                         ,height: height};
    return _elm.Window.values;
-};
-Elm.World = Elm.World || {};
-Elm.World.Assets = Elm.World.Assets || {};
-Elm.World.Assets.make = function (_elm) {
-   "use strict";
-   _elm.World = _elm.World || {};
-   _elm.World.Assets = _elm.World.Assets || {};
-   if (_elm.World.Assets.values)
-   return _elm.World.Assets.values;
-   var _op = {},
-   _N = Elm.Native,
-   _U = _N.Utils.make(_elm),
-   _L = _N.List.make(_elm),
-   _P = _N.Ports.make(_elm),
-   $moduleName = "World.Assets",
-   $World$Model = Elm.World.Model.make(_elm);
-   var tiles = {_: {}
-               ,dirt: "/assets/world/tiles/landscapeTiles_073.png"
-               ,grass: "/assets/world/tiles/landscapeTiles_067.png"
-               ,hillE: "/assets/world/tiles/landscapeTiles_106.png"
-               ,hillN: "/assets/world/tiles/landscapeTiles_099.png"
-               ,hillNE: "/assets/world/tiles/landscapeTiles_029.png"
-               ,hillNW: "/assets/world/tiles/landscapeTiles_021.png"
-               ,hillS: "/assets/world/tiles/landscapeTiles_098.png"
-               ,hillSE: "/assets/world/tiles/landscapeTiles_036.png"
-               ,hillSW: "/assets/world/tiles/landscapeTiles_028.png"
-               ,hillTop: "/assets/world/tiles/landscapeTiles_075.png"
-               ,hillW: "/assets/world/tiles/landscapeTiles_091.png"};
-   var getTileImageSrc = function (tileType) {
-      return function () {
-         switch (tileType.ctor)
-         {case "DirtTile":
-            return tiles.dirt;
-            case "GrassTile":
-            return tiles.grass;
-            case "HillETile":
-            return tiles.hillE;
-            case "HillNETile":
-            return tiles.hillNE;
-            case "HillNTile":
-            return tiles.hillN;
-            case "HillNWTile":
-            return tiles.hillNW;
-            case "HillSETile":
-            return tiles.hillSE;
-            case "HillSTile":
-            return tiles.hillS;
-            case "HillSWTile":
-            return tiles.hillSW;
-            case "HillTopTile":
-            return tiles.hillTop;
-            case "HillWTile":
-            return tiles.hillW;}
-         _U.badCase($moduleName,
-         "between lines 22 and 33");
-      }();
-   };
-   _elm.World.Assets.values = {_op: _op
-                              ,tiles: tiles
-                              ,getTileImageSrc: getTileImageSrc};
-   return _elm.World.Assets.values;
-};
-Elm.World = Elm.World || {};
-Elm.World.Display = Elm.World.Display || {};
-Elm.World.Display.make = function (_elm) {
-   "use strict";
-   _elm.World = _elm.World || {};
-   _elm.World.Display = _elm.World.Display || {};
-   if (_elm.World.Display.values)
-   return _elm.World.Display.values;
-   var _op = {},
-   _N = Elm.Native,
-   _U = _N.Utils.make(_elm),
-   _L = _N.List.make(_elm),
-   _P = _N.Ports.make(_elm),
-   $moduleName = "World.Display",
-   $Basics = Elm.Basics.make(_elm),
-   $Graphics$Collage = Elm.Graphics.Collage.make(_elm),
-   $Graphics$Element = Elm.Graphics.Element.make(_elm),
-   $List = Elm.List.make(_elm),
-   $Model = Elm.Model.make(_elm),
-   $World$Assets = Elm.World.Assets.make(_elm),
-   $World$Model = Elm.World.Model.make(_elm);
-   var sortTiles = function (world) {
-      return world;
-   };
-   var zoom = 0.5;
-   var translatePos = function (_v0) {
-      return function () {
-         return function () {
-            var z$ = $Basics.toFloat(_v0.z);
-            var y$ = $Basics.toFloat(_v0.y);
-            var x$ = $Basics.toFloat(_v0.x);
-            var h = -64 * zoom / 2;
-            var w = 129 * zoom / 2;
-            return {ctor: "_Tuple2"
-                   ,_0: x$ * w + y$ * w
-                   ,_1: y$ * h - x$ * h + z$ * 16};
-         }();
-      }();
-   };
-   var getTileImage = F2(function (src,
-   _v2) {
-      return function () {
-         return function () {
-            var $ = translatePos(_v2.pos),
-            x = $._0,
-            y = $._1;
-            return $Graphics$Collage.move({ctor: "_Tuple2"
-                                          ,_0: x
-                                          ,_1: y})($Graphics$Collage.toForm(A3($Graphics$Element.image,
-            $Basics.floor(131 * zoom),
-            $Basics.floor(131 * zoom),
-            src)));
-         }();
-      }();
-   });
-   var displayTile = function (_v4) {
-      return function () {
-         return getTileImage($World$Assets.getTileImageSrc(_v4.tileType))(_v4);
-      }();
-   };
-   var displayTiles = function (_v6) {
-      return function () {
-         return $List.map(function (t) {
-            return displayTile(t);
-         })(_v6.tiles);
-      }();
-   };
-   var display = F2(function (_v8,
-   _v9) {
-      return function () {
-         return function () {
-            switch (_v8.ctor)
-            {case "_Tuple2":
-               return displayTiles(sortTiles(_v9.world));}
-            _U.badCase($moduleName,
-            "between lines 46 and 47");
-         }();
-      }();
-   });
-   _elm.World.Display.values = {_op: _op
-                               ,display: display};
-   return _elm.World.Display.values;
-};
-Elm.World = Elm.World || {};
-Elm.World.Model = Elm.World.Model || {};
-Elm.World.Model.make = function (_elm) {
-   "use strict";
-   _elm.World = _elm.World || {};
-   _elm.World.Model = _elm.World.Model || {};
-   if (_elm.World.Model.values)
-   return _elm.World.Model.values;
-   var _op = {},
-   _N = Elm.Native,
-   _U = _N.Utils.make(_elm),
-   _L = _N.List.make(_elm),
-   _P = _N.Ports.make(_elm),
-   $moduleName = "World.Model",
-   $Basics = Elm.Basics.make(_elm),
-   $List = Elm.List.make(_elm);
-   var featureRiver = F3(function (points,
-   seed,
-   world) {
-      return world;
-   });
-   var featureHill = F3(function (points,
-   seed,
-   world) {
-      return world;
-   });
-   var tile = F5(function (tileType,
-   seed,
-   i,
-   j,
-   k) {
-      return {_: {}
-             ,pos: {_: {},x: i,y: j,z: k}
-             ,tileType: tileType};
-   });
-   var row = F4(function (tileType,
-   h,
-   seed,
-   i) {
-      return $List.reverse($List.map(function (j) {
-         return A5(tile,
-         tileType,
-         seed,
-         i,
-         j,
-         0);
-      })(_L.range(1,h)));
-   });
-   var filled = F4(function (tileType,
-   w,
-   h,
-   seed) {
-      return function () {
-         var tiles = $List.reverse($List.concatMap(function (i) {
-            return A4(row,
-            tileType,
-            h,
-            seed,
-            i);
-         })(_L.range(1,w)));
-         return {_: {},tiles: tiles};
-      }();
-   });
-   var World = function (a) {
-      return {_: {},tiles: a};
-   };
-   var Tile = F2(function (a,b) {
-      return {_: {}
-             ,pos: b
-             ,tileType: a};
-   });
-   var Position = F3(function (a,
-   b,
-   c) {
-      return {_: {}
-             ,x: a
-             ,y: b
-             ,z: c};
-   });
-   var HillNWTile = {ctor: "HillNWTile"};
-   var HillWTile = {ctor: "HillWTile"};
-   var HillSWTile = {ctor: "HillSWTile"};
-   var HillSTile = {ctor: "HillSTile"};
-   var HillSETile = {ctor: "HillSETile"};
-   var HillETile = {ctor: "HillETile"};
-   var HillNETile = {ctor: "HillNETile"};
-   var HillNTile = {ctor: "HillNTile"};
-   var HillTopTile = {ctor: "HillTopTile"};
-   var DirtTile = {ctor: "DirtTile"};
-   var GrassTile = {ctor: "GrassTile"};
-   _elm.World.Model.values = {_op: _op
-                             ,GrassTile: GrassTile
-                             ,DirtTile: DirtTile
-                             ,HillTopTile: HillTopTile
-                             ,HillNTile: HillNTile
-                             ,HillNETile: HillNETile
-                             ,HillETile: HillETile
-                             ,HillSETile: HillSETile
-                             ,HillSTile: HillSTile
-                             ,HillSWTile: HillSWTile
-                             ,HillWTile: HillWTile
-                             ,HillNWTile: HillNWTile
-                             ,Position: Position
-                             ,Tile: Tile
-                             ,World: World
-                             ,filled: filled
-                             ,row: row
-                             ,tile: tile
-                             ,featureHill: featureHill
-                             ,featureRiver: featureRiver};
-   return _elm.World.Model.values;
 };

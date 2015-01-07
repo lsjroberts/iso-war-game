@@ -38,8 +38,13 @@ can be received on the current state.
 
 **Objectives:**
 
-1. [ ] Add hill generation (1st iteration)
-2. [ ] Add river generation (1st iteration)
+~~1. [ ] Add hill generation~~
+~~2. [ ] Add river generation~~
+1. [ ] Create map editor
+    1. [ ] Add river brush
+    2. [ ] Add elevation brush
+    3. [ ] Add map saving
+    4. [ ] Add map loading
 
 
 ### Three
@@ -99,8 +104,7 @@ can be received on the current state.
 
 **Objectives:**
 
-1. [ ] Add placeholder character UI
-2. [ ] Add conversation mechanics
+~~1. [ ] Add procedural terrain generation based on loose descriptions~~
 
 
 ### Eight
@@ -111,4 +115,39 @@ can be received on the current state.
 
 **Objectives:**
 
-1. [ ]
+1. [ ] Add placeholder character UI
+2. [ ] Add conversation mechanics
+
+
+### Nine
+
+**Deadline:** 9th Aug 2015
+
+**Status:** _Not started_
+
+**Objectives:**
+
+1. [ ] Add story mechanics
+
+
+### Ten
+
+**Deadline:** 6th Sep 2015
+
+**Status:** _Not started_
+
+**Objectives:**
+
+1. [ ] Write story outline
+2. [ ] Create placeholder characters and conversations
+
+
+### Eleven
+
+**Deadline:** 4th Oct 2015
+
+**Status:** _Not started_
+
+**Objectives:**
+
+1. [ ] Create maps for story

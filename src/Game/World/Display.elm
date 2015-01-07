@@ -1,13 +1,13 @@
-module World.Display (display) where
+module Game.World.Display (displayWorld) where
 
 import List (map)
 import Color (rgb)
 import Graphics.Collage (Form,move,toForm)
 import Graphics.Element (Element,image)
 
-import Model (GameState)
-import World.Model (Position,Tile,TileType,World)
-import World.Assets (getTileImageSrc)
+import Game.Model (Game)
+import Game.World.Model (Position,Tile,TileType,World)
+import Game.World.Assets (getTileImageSrc)
 
 zoom : Float
 zoom = 0.5
@@ -41,7 +41,7 @@ translatePos ({x,y,z} as pos) =
     in ( x'*w + y'*w
        , y'*h - x'*h + z'*16)
 
-display : (Int,Int) -> GameState -> List Form
-display (w,h) ({world} as gameState) =
+displayWorld : (Int,Int) -> Game -> List Form
+displayWorld (w,h) ({world} as game) =
     world |> sortTiles
           |> displayTiles

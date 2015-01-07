@@ -1,6 +1,6 @@
-module World.Assets where
+module Game.World.Assets where
 
-import World.Model (..)
+import Game.World.Model (..)
 
 tiles =
     { grass   = "/assets/world/tiles/landscapeTiles_067.png"

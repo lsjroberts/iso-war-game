@@ -1,4 +1,4 @@
-module World.Model where
+module Game.World.Model where
 
 import List (map,reverse,concatMap)
 
