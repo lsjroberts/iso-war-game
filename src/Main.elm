@@ -11,7 +11,7 @@ import Updates
 
 gameState : Signal Model.GameState
 gameState =
-    Signal.foldp Updates.step Model.defaultGame Input.input
+    Signal.foldp Updates.step Model.defaultGameState Input.input
 
 main : Signal Element
 main =

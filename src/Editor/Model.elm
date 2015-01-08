@@ -1,7 +1,25 @@
 module Editor.Model where
 
-type Brush =
-      Elevation | River
+import Game.World.Model (..)
+
+type BrushType =
+    Elevation | River | DenseUrban | SparseUrban | Road
+
+type BrushProbability =
+    Fixed | Possible | Never
+
+type alias Brush =
+    { brush:BrushType
+    , probability:BrushProbability
+    , isPainting:Bool }
 
 type alias Editor =
-    { brush:Brush }
+    { brush:Maybe Brush
+    , world:Maybe World
+    , saved:Maybe Bool }
+
+defaultEditor : Editor
+defaultEditor =
+    { brush = Nothing
+    , world = Just (filled GrassTile 20 20 1)
+    , saved = Nothing }

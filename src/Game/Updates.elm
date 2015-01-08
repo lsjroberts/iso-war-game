@@ -1,12 +1,21 @@
 module Game.Updates where
 
 import Input (Input)
-import Model (GameState,Offset)
+import Model (GameState)
+import Game.Model (Game,Offset,defaultGame)
 
 stepPlay : Input -> GameState -> GameState
-stepPlay ({delta,userInput} as input) ({offset} as gameState) =
+stepPlay ({delta,userInput} as input) ({game} as gameState) =
+    { gameState | game <- (
+        case game of
+            Nothing -> Just defaultGame
+            Just game -> Just (game |> stepGame input)
+    ) }
+
+stepGame : Input -> Game -> Game
+stepGame input ({offset} as game) =
     let offset' = offset |> stepOffset input
-    in { gameState | offset <- offset' }
+    in { game | offset <- offset' }
 
 stepOffset : Input -> Offset -> Offset
 stepOffset {delta,userInput} (x,y) =

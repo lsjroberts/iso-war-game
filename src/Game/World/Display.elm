@@ -5,7 +5,6 @@ import Color (rgb)
 import Graphics.Collage (Form,move,toForm)
 import Graphics.Element (Element,image)
 
-import Game.Model (Game)
 import Game.World.Model (Position,Tile,TileType,World)
 import Game.World.Assets (getTileImageSrc)
 
@@ -41,7 +40,7 @@ translatePos ({x,y,z} as pos) =
     in ( x'*w + y'*w
        , y'*h - x'*h + z'*16)
 
-displayWorld : (Int,Int) -> Game -> List Form
-displayWorld (w,h) ({world} as game) =
+displayWorld : (Int,Int) -> World -> List Form
+displayWorld (w,h) world =
     world |> sortTiles
           |> displayTiles
