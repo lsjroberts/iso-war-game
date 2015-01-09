@@ -13,6 +13,6 @@ type alias GameState =
 
 defaultGameState : GameState
 defaultGameState =
-    { state = Play
+    { state = Editor
     , game = Nothing
     , editor = Nothing }

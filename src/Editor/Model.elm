@@ -11,7 +11,8 @@ type BrushProbability =
 type alias Brush =
     { brush:BrushType
     , probability:BrushProbability
-    , isPainting:Bool }
+    , isPainting:Bool
+    , pos:Position }
 
 type alias Editor =
     { brush:Maybe Brush

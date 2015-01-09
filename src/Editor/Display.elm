@@ -17,4 +17,10 @@ displayEditorView : (Int,Int) -> Editor -> List Form
 displayEditorView dimensions ({world} as editor) =
     case world of
         Nothing -> []
-        Just world -> [ displayWorld dimensions world |> group ]
+        Just world ->
+            [ displayWorld dimensions world |> group ] ++
+            ( displayTools dimensions editor )
+
+displayTools : (Int,Int) -> Editor -> List Form
+displayTools dimensions ({brush} as editor) =
+    []

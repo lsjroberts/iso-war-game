@@ -1,0 +1,11 @@
+{
+    "name": "insert-game-name",
+    "main": "index.html",
+    "window": {
+        "title": "[insert-game-name]",
+        "toolbar": true,
+        "frame": true,
+        "position": "center",
+        "fullscreen": true
+    }
+}
