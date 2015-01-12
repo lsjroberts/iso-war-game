@@ -9,6 +9,7 @@ import Window
 
 type alias UserInput =
     { scroll:(Float,Float)
+    , mousePos:(Int,Int)
     , isMouseDown:Bool }
 
 type alias Input =
@@ -22,6 +23,10 @@ delta =
 scroll : Signal (Float,Float)
 scroll =
     Mouse.position |> map2 nearWindowEdge Window.dimensions -- refactor to generic `nearEdge dimensions spacing`
+
+mousePos : Signal (Int,Int)
+mousePos =
+    Mouse.position
 
 isMouseDown : Signal Bool
 isMouseDown =
@@ -42,7 +47,7 @@ nearWindowEdgeSide dim pos =
 
 userInput : Signal UserInput
 userInput =
-    map2 UserInput scroll isMouseDown
+    map3 UserInput scroll mousePos isMouseDown
 
 input : Signal Input
 input =

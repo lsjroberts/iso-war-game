@@ -1,4 +1,4 @@
-module Game.Updates where
+module Game.Updates (stepPlay,stepPause) where
 
 import Input (Input)
 import Model (GameState)
@@ -19,7 +19,7 @@ stepGame input ({offset} as game) =
 
 stepOffset : Input -> Offset -> Offset
 stepOffset {delta,userInput} (x,y) =
-    let (x',y') = userInput.scroll
+    let (x',y') = userInput.mouse.scroll
     in ( x - x'*50
        , y + y'*50 )
 

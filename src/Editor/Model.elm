@@ -9,10 +9,10 @@ type BrushProbability =
     Fixed | Possible | Never
 
 type alias Brush =
-    { brush:BrushType
+    { brushType:BrushType
     , probability:BrushProbability
     , isPainting:Bool
-    , pos:Position }
+    , pos:Maybe Position }
 
 type alias Editor =
     { brush:Maybe Brush
@@ -21,6 +21,6 @@ type alias Editor =
 
 defaultEditor : Editor
 defaultEditor =
-    { brush = Nothing
+    { brush = Just { brushType = River, probability = Fixed, isPainting = False, pos = Nothing } --brush = Nothing
     , world = Just (filled GrassTile 20 20 1)
     , saved = Nothing }

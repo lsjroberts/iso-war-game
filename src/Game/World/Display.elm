@@ -8,8 +8,9 @@ import Graphics.Element (Element,image)
 import Game.World.Model (Position,Tile,TileType,World)
 import Game.World.Assets (getTileImageSrc)
 
+-- TODO: Refactor this out to a configurable value
 zoom : Float
-zoom = 0.5
+zoom = 1
 
 sortTiles : World -> World
 sortTiles world =
@@ -28,7 +29,7 @@ getTileImage : String -> Tile -> Form
 getTileImage src ({pos} as tile) =
     let (x,y) = translatePos pos
     in image (floor <| 131 * zoom) (floor <| 131 * zoom) src |> toForm
-                         |> move (x,y)
+                                                             |> move (x,y)
 
 translatePos : Position -> (Float,Float)
 translatePos ({x,y,z} as pos) =
