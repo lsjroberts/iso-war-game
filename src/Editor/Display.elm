@@ -6,7 +6,8 @@ import Graphics.Element (image)
 
 import Model (GameState)
 import Editor.Assets (getBrushSrc)
-import Editor.Model (Editor,Brush)
+import Editor.Model (Editor,Brush,BrushType)
+import Game.World.Model (Position,tileSize,translatePos)
 import Game.World.Display (displayWorld)
 
 displayEditor : (Int,Int) -> GameState -> List Form
@@ -29,13 +30,14 @@ displayBrush dimensions ({brush} as editor) =
     case brush of
         Nothing -> []
         Just brush ->
-            [ displayBrushMouseHint dimensions brush ]
+            [ displayBrushPointer dimensions brush ]
 
-displayBrushMouseHint : (Int,Int) -> Brush -> Form
-displayBrushMouseHint dimensions brush =
-    image 131 131 (getBrushSrc brush.brushType) |> toForm
-                                                |> move (0,0)
-                                                |> alpha 0.5
+displayBrushPointer : (Int,Int) -> Brush -> Form
+displayBrushPointer dimensions ({brushType,pos} as brush) =
+    let (x,y) = translatePos pos
+    in image tileSize tileSize (getBrushSrc brushType) |> toForm
+                                                       |> move (x,y)
+                                                       |> alpha 0.5
 
 displayTools : (Int,Int) -> Editor -> List Form
 displayTools dimensions ({brush} as editor) =

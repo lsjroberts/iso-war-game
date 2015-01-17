@@ -1,23 +1,15 @@
 module Game.World.Model where
 
 import List (map,reverse,concatMap)
+import Signal
 
-type TileType = GrassTile
-              | DirtTile
-              | HillTopTile
-              | HillNTile
-              | HillNETile
-              | HillETile
-              | HillSETile
-              | HillSTile
-              | HillSWTile
-              | HillWTile
-              | HillNWTile
+type TileType = GrassTile | DirtTile | HillTopTile | HillNTile | HillNETile |
+                HillETile | HillSETile | HillSTile | HillSWTile | HillWTile | HillNWTile
 
 type alias Position =
-  { x:Int
-  , y:Int
-  , z:Int }
+    { x:Int
+    , y:Int
+    , z:Int }
 
 type alias Tile =
     { tileType:TileType
@@ -25,6 +17,27 @@ type alias Tile =
 
 type alias World =
     { tiles:List Tile }
+
+-- TODO: Refactor this to be a configurable value
+zoom : Float
+zoom = 1.0
+
+tileSize : Int
+tileSize = 131
+
+tileHover : Signal.Channel (Maybe Tile)
+tileHover =
+    Signal.channel Nothing
+
+translatePos : Position -> (Float,Float)
+translatePos ({x,y,z} as pos) =
+    let w = (129 * zoom) / 2
+        h = (-64 * zoom) / 2
+        x' = toFloat x
+        y' = toFloat y
+        z' = toFloat z
+    in ( x'*w + y'*w
+       , y'*h - x'*h + z'*16)
 
 filled : TileType -> Int -> Int -> Int -> World
 filled tileType w h seed =

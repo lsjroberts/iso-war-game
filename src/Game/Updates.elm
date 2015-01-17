@@ -19,7 +19,7 @@ stepGame input ({offset} as game) =
 
 stepOffset : Input -> Offset -> Offset
 stepOffset {delta,userInput} (x,y) =
-    let (x',y') = userInput.mouse.scroll
+    let (x',y') = userInput.scroll
     in ( x - x'*50
        , y + y'*50 )
 
