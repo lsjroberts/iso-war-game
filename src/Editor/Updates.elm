@@ -3,6 +3,7 @@ module Editor.Updates (stepEditor) where
 import Input (Input)
 import Model (GameState)
 import Editor.Model (..)
+import Game.World.Input (worldPointerPos)
 import Game.World.Model (World,Tile,tileSize)
 
 stepEditor : Input -> GameState -> GameState
@@ -32,10 +33,10 @@ stepBrushIsPainting ({userInput} as input) ({isPainting} as brush) =
            | otherwise -> False }
 
 stepBrushPosition : Input -> Brush -> Brush
-stepBrushPosition ({userInput} as input) ({pos} as brush) =
-    let (mx,my) = userInput.mousePos
-    in { brush | pos <- { x = 1 --mx % tileSize
-                        , y = my % tileSize
+stepBrushPosition input ({pos} as brush) =
+    let (x',y') = worldPointerPos input
+    in { brush | pos <- { x = x' --mx % tileSize
+                        , y = y' --my % tileSize
                         , z = 0 } }
 
 stepWorld : Input -> Editor -> Editor
