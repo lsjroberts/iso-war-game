@@ -28,9 +28,8 @@ stepBrush input ({brush} as editor) =
 
 stepBrushIsPainting : Input -> Brush -> Brush
 stepBrushIsPainting ({userInput} as input) ({isPainting} as brush) =
-    { brush | isPainting <-
-        if | userInput.isMouseDown -> True
-           | otherwise -> False }
+    { brush | isPainting <- if | userInput.isMouseDown -> True
+                               | otherwise -> False }
 
 stepBrushPosition : Input -> Brush -> Brush
 stepBrushPosition input ({pos} as brush) =

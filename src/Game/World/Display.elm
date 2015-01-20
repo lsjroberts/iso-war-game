@@ -8,7 +8,7 @@ import Graphics.Element
 import Graphics.Collage
 
 import Game.World.Model (..)
-import Game.World.Updates (..)
+import Game.World.Input (..)
 import Game.World.Assets (getTileImageSrc)
 
 displayWorld : (Int,Int) -> World -> List Graphics.Collage.Form
@@ -28,8 +28,8 @@ displayTile : Tile -> Graphics.Collage.Form
 displayTile ({tileType,pos} as tile) =
     let (x,y) = translatePos pos
     in tile |> getTileImage (getTileImageSrc tileType)
-            |> Graphics.Input.hoverable (\on -> Signal.send tileUpdates (if on then Hover tile else NoOp))
-            |> Graphics.Input.clickable (Signal.send tileUpdates (Hover tile))
+            |> Graphics.Input.hoverable (\on -> Signal.send tileInput (if on then Hover tile else NoOp))
+            |> Graphics.Input.clickable (Signal.send tileInput (Hover tile))
             |> Graphics.Collage.toForm
             |> Graphics.Collage.move (x,y)
 

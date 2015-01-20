@@ -1,8 +1,20 @@
 module Game.World.Input where
 
-import Input (..)
+import Signal
 
-worldPointerPos : Input -> (Int,Int)
-worldPointerPos ({userInput} as input) =
-    let (mx,my) = userInput.mousePos
-    in (1,1)
+import Game.World.Model (Tile)
+
+type TileAction
+    = NoOp
+    | MouseOver Tile
+    | MouseOut Tile
+    | Hover Tile
+    | Click Tile
+
+
+
+tileInput : Signal.Channel TileAction
+tileInput = Signal.channel NoOp
+
+worldInput : Signal WorldInput
+worldInput = Signal.map WorldInput tileInput

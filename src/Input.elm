@@ -3,34 +3,43 @@ module Input where
 import Time
 import Debug
 import Mouse
---import Signal (Signal,map,map2,sampleOn)
-import Signal (..)
+import Signal
 import Window
+
+
+-- INPUT
+
+type alias Input =
+    { delta:Float
+    , userInput:UserInput }
+
+input : Signal.Signal Input
+input =
+    Debug.watch "input" <~
+    Signal.sampleOn delta (Signal.map2 Input delta userInput)
+
+
+-- TIME INPUT
+
+delta : Signal.Signal Float
+delta = Time.fps 30
+
+
+-- USER INPUT
 
 type alias UserInput =
     { scroll:(Float,Float)
     , mousePos:(Int,Int)
     , isMouseDown:Bool }
 
-type alias Input =
-    { delta:Float
-    , userInput:UserInput }
+scroll : Signal.Signal (Float,Float)
+scroll = Mouse.position |> Signal.map2 nearWindowEdge Window.dimensions -- refactor to generic `nearEdge dimensions spacing`
 
-delta : Signal Float
-delta =
-    Time.fps 30
+mousePos : Signal.Signal (Int,Int)
+mousePos = Mouse.position
 
-scroll : Signal (Float,Float)
-scroll =
-    Mouse.position |> map2 nearWindowEdge Window.dimensions -- refactor to generic `nearEdge dimensions spacing`
-
-mousePos : Signal (Int,Int)
-mousePos =
-    Mouse.position
-
-isMouseDown : Signal Bool
-isMouseDown =
-    Mouse.isDown
+isMouseDown : Signal.Signal Bool
+isMouseDown = Mouse.isDown
 
 nearWindowEdge : (Int,Int) -> (Int,Int) -> (Float,Float)
 nearWindowEdge (w,h) (x,y) =
@@ -45,11 +54,6 @@ nearWindowEdgeSide dim pos =
           | pos < spacing  -> pos / spacing - 1
           | otherwise      -> 0
 
-userInput : Signal UserInput
+userInput : Signal.Signal UserInput
 userInput =
-    map3 UserInput scroll mousePos isMouseDown
-
-input : Signal Input
-input =
-    Debug.watch "input" <~
-    sampleOn delta (map2 Input delta userInput)
+    Signal.map3 UserInput scroll mousePos isMouseDown
