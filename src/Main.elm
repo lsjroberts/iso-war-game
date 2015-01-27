@@ -2,17 +2,14 @@ module Main where
 
 import Signal
 import Window
-import Graphics.Element (Element)
-
+import Graphics.Element
+--import View
 import Input
-import Model
-import Display
-import Updates
+import State
+--import Update
 
-gameState : Signal Model.GameState
-gameState =
-    Signal.foldp Updates.step Model.defaultGameState Input.input
+state : Signal.Signal State.Model
+state = Signal.foldp State.update State.default Input.input
 
-main : Signal Element
-main =
-    Signal.map2 Display.display Window.dimensions gameState
+main : Signal.Signal Graphics.Element.Element
+main = Signal.map2 State.view Window.dimensions state

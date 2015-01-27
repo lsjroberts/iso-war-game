@@ -32,7 +32,7 @@ can be received on the current state.
 
 ### Two
 
-**Deadline:** 25th Jan 2015
+**Deadline:** 8th Feb 2015
 
 **Status:** In progress
 

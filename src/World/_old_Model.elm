@@ -17,6 +17,7 @@ type alias Tile =
 
 type alias World =
     { tiles:List Tile }
+    -- { tiles:List (ID, Tile) }
 
 -- TODO: Refactor this to be a configurable value
 zoom : Float
@@ -24,10 +25,6 @@ zoom = 1.0
 
 tileSize : Int
 tileSize = 131
-
---tileHover : Signal.Channel (Maybe Tile)
---tileHover =
---    Signal.channel Nothing
 
 translatePos : Position -> (Float,Float)
 translatePos ({x,y,z} as pos) =

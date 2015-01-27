@@ -11,10 +11,8 @@ type TileAction
     | Hover Tile
     | Click Tile
 
-
-
-tileInput : Signal.Channel TileAction
-tileInput = Signal.channel NoOp
+tileActionChannel : Signal.Channel TileAction
+tileActionChannel = Signal.channel NoOp
 
 worldInput : Signal WorldInput
-worldInput = Signal.map WorldInput tileInput
+worldInput = Signal.map WorldInput tileActionChannel

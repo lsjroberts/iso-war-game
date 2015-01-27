@@ -4,19 +4,20 @@ import Time
 import Debug
 import Mouse
 import Signal
+import Signal ((<~))
 import Window
 
 
 -- INPUT
 
-type alias Input =
+type alias Model =
     { delta:Float
     , userInput:UserInput }
 
-input : Signal.Signal Input
+input : Signal.Signal Model
 input =
     Debug.watch "input" <~
-    Signal.sampleOn delta (Signal.map2 Input delta userInput)
+    Signal.sampleOn delta (Signal.map2 Model delta userInput)
 
 
 -- TIME INPUT

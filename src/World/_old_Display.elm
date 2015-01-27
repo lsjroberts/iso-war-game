@@ -28,8 +28,8 @@ displayTile : Tile -> Graphics.Collage.Form
 displayTile ({tileType,pos} as tile) =
     let (x,y) = translatePos pos
     in tile |> getTileImage (getTileImageSrc tileType)
-            |> Graphics.Input.hoverable (\on -> Signal.send tileInput (if on then Hover tile else NoOp))
-            |> Graphics.Input.clickable (Signal.send tileInput (Hover tile))
+            |> Graphics.Input.hoverable (\on -> Signal.send tileActionChannel (if on then Hover tile else NoOp))
+            |> Graphics.Input.clickable (Signal.send tileActionChannel (Hover tile))
             |> Graphics.Collage.toForm
             |> Graphics.Collage.move (x,y)
 
