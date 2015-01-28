@@ -25,8 +25,9 @@ init x y z =
 area : (Int, Int) -> List Model
 area (w, h) =
     let column x =
-            [h-1..0] |> List.map (\y -> init x y 0)
-    in [0..w-1] |> List.concatMap (\x -> column x)
+            [0..h] |> List.map (\y -> init x y 0)
+                   |> List.reverse
+    in [0..w] |> List.concatMap (\x -> column x)
 
 -- TODO: Refactor this to be a configurable value
 zoom : Float
@@ -36,7 +37,7 @@ tileWidth : Int
 tileWidth = 131
 
 tileHeight : Int
-tileHeight = 131
+tileHeight = 64
 
 tileVerticalSpacing : Float
 tileVerticalSpacing = 16.0

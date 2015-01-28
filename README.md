@@ -32,7 +32,7 @@ can be received on the current state.
 
 ### Two
 
-**Deadline:** 8th Feb 2015
+**Deadline:** ~~25th Jan 2015~~ 8th Feb 2015
 
 **Status:** In progress
 
@@ -91,7 +91,7 @@ can be received on the current state.
 
 **Objectives:**
 
-1. [ ] Add city / building / road terrain generation
+1. [ ] Add city / building / road terrain ~~generation~~ editor brushes
 2. [ ] Update unit movement to consider buildings and roads
 3. [ ] Update combat to consider buildings and roads
 

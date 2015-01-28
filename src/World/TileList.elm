@@ -9,7 +9,7 @@ import Graphics.Collage
 
 type Action
     = Insert World.Tile.TileType World.Position.Model
-    | Fill (Int, Int) World.Tile.TileType
+    | Fill World.Tile.TileType (Int, Int)
     | Remove
     | Clear
     | Modify ID World.Tile.Action
@@ -34,13 +34,25 @@ update : Action -> Model -> Model
 update action model =
     case action of
         Insert tileType pos ->
-            model |> insertTile (World.Tile.init tileType pos)
-
-        Fill dimensions tileType ->
-            let area = World.Position.area dimensions
-                tiles = area |> List.map (\pos -> World.Tile.init tileType pos)
+            --model |> insertTile (World.Tile.init tileType pos)
+            let tile' = (model.nextID, World.Tile.init tileType pos)
+                tiles' = model.tiles ++ [ tile' ]
             in
-                model |> insertTiles tiles
+                { model |
+                    tiles <- tiles',
+                    nextID <- model.nextID + 1
+                }
+
+        Fill tileType dimensions ->
+            let area = World.Position.area dimensions
+                tiles' = area |> List.map (\pos -> World.Tile.init tileType pos)
+            in
+                { model |
+                    tiles <- List.indexedMap (,) tiles',
+                    nextID <- List.length tiles'
+                }
+                --model |> insertTiles tiles
+                --area |> List.map (\pos -> update (Insert tileType pos) model)
 
         Remove ->
             { model | tiles <- List.drop 1 model.tiles }
@@ -56,19 +68,26 @@ update action model =
             in
                 { model | tiles <- model.tiles |> List.map updateTile }
 
-insertTile : World.Tile.Model -> Model -> Model
-insertTile tile model =
-    let newTile = (model.nextID, tile)
-        newTiles = model.tiles ++ [ newTile ]
-    in
-        { model |
-            tiles <- newTiles,
-            nextID <- model.nextID + 1
-        }
+--getNextTile : Model -> World.Tile.Model -> (ID, World.Tile.Model)
+--getNextTile model tile =
 
-insertTiles : List World.Tile.Model -> Model -> Model
-insertTiles tiles model =
-    tiles |> List.map (\tile -> insertTile tile model)
+
+--insertTile : World.Tile.Model -> Model -> Model
+--insertTile tile model =
+--    let tile' = getNextTile model tile
+--        tiles' = model.tiles ++ [ tile' ]
+--    in
+--        { model |
+--            tiles <- tiles',
+--            nextID <- model.nextID + 1
+--        }
+
+--insertTiles : List World.Tile.Model -> Model -> Model
+--insertTiles tiles model =
+--    let tiles' = tiles |> List.map (\tile -> insertTile tile model)
+--    in
+--        { model | tiles <- tiles' }
+
 
 -- VIEW
 
