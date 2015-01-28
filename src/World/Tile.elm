@@ -12,7 +12,7 @@ type Action
     = SetType TileType
     | Move World.Position.Model
 
-type TileType = GrassTile | DirtTile | HillTopTile | HillNTile | HillNETile |
+type TileType = BlankTile | GrassTile | DirtTile | HillTopTile | HillNTile | HillNETile |
                 HillETile | HillSETile | HillSTile | HillSWTile | HillWTile | HillNWTile
 
 type alias Model =
@@ -58,7 +58,7 @@ view ({pos} as model) =
     let (x, y) = World.Position.translateToScreenCoords pos
     in model |> image
              |> Graphics.Collage.toForm
---             |> Graphics.Collage.move (x, y)
+             |> Graphics.Collage.move (x, y)
 
 image : Model -> Graphics.Element.Element
 image ({tileType} as model) =
@@ -72,6 +72,7 @@ tilePath tileType =
     let tiles = World.Assets.tiles
     in
         case tileType of
+            BlankTile   -> tiles.blank
             GrassTile   -> tiles.grass
             DirtTile    -> tiles.dirt
             HillTopTile -> tiles.hillTop

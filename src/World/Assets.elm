@@ -1,7 +1,9 @@
 module World.Assets where
 
 tiles =
-    { grass   = "/assets/world/tiles/landscapeTiles_067.png"
+    { blank   = "/assets/world/tiles/_blank.png"
+
+    , grass   = "/assets/world/tiles/landscapeTiles_067.png"
     , dirt    = "/assets/world/tiles/landscapeTiles_073.png"
 
     , hillTop = "/assets/world/tiles/landscapeTiles_075.png"
