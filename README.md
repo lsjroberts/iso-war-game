@@ -40,6 +40,7 @@ can be received on the current state.
 
 ~~1. [ ] Add hill generation~~
 ~~2. [ ] Add river generation~~
+
 1. [ ] Create map editor
     1. [ ] Add river brush
     2. [ ] Add elevation brush
