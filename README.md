@@ -38,14 +38,14 @@ can be received on the current state.
 
 **Objectives:**
 
-~~1. [ ] Add hill generation~~
-~~2. [ ] Add river generation~~
+- [ ] ~~Add hill generation~~
+- [ ] ~~Add river generation~~
 
-1. [ ] Create map editor
-    1. [ ] Add river brush
-    2. [ ] Add elevation brush
-    3. [ ] Add map saving
-    4. [ ] Add map loading
+- [ ] Create map editor
+    - [ ] Add river brush
+    - [ ] Add elevation brush
+    - [ ] Add map saving
+    - [ ] Add map loading
 
 
 ### Three
@@ -56,8 +56,8 @@ can be received on the current state.
 
 **Objectives:**
 
-1. [ ] Add units
-2. [ ] Add unit controls (1st iteration)
+- [ ] Add units
+- [ ] Add unit controls (1st iteration)
 
 
 ### Four
@@ -68,9 +68,9 @@ can be received on the current state.
 
 **Objectives:**
 
-1. [ ] Add unit movement restrictions
-2. [ ] Add unit movement traversal animation
-3. [ ] Add unit movement path guides
+- [ ] Add unit movement restrictions
+- [ ] Add unit movement traversal animation
+- [ ] Add unit movement path guides
 
 
 ### Five
@@ -81,7 +81,7 @@ can be received on the current state.
 
 **Objectives:**
 
-1. [ ] Add unit combat mechanics
+- [ ] Add unit combat mechanics
 
 
 ### Six
@@ -92,9 +92,9 @@ can be received on the current state.
 
 **Objectives:**
 
-1. [ ] Add city / building / road terrain ~~generation~~ editor brushes
-2. [ ] Update unit movement to consider buildings and roads
-3. [ ] Update combat to consider buildings and roads
+- [ ] Add city / building / road terrain ~~generation~~ editor brushes
+- [ ] Update unit movement to consider buildings and roads
+- [ ] Update combat to consider buildings and roads
 
 
 ### Seven
@@ -105,7 +105,7 @@ can be received on the current state.
 
 **Objectives:**
 
-~~1. [ ] Add procedural terrain generation based on loose descriptions~~
+1. [ ] ~~Add procedural terrain generation based on loose descriptions~~
 
 
 ### Eight
@@ -116,8 +116,8 @@ can be received on the current state.
 
 **Objectives:**
 
-1. [ ] Add placeholder character UI
-2. [ ] Add conversation mechanics
+- [ ] Add placeholder character UI
+- [ ] Add conversation mechanics
 
 
 ### Nine
@@ -128,7 +128,7 @@ can be received on the current state.
 
 **Objectives:**
 
-1. [ ] Add story mechanics
+- [ ] Add story mechanics
 
 
 ### Ten
@@ -139,8 +139,8 @@ can be received on the current state.
 
 **Objectives:**
 
-1. [ ] Write story outline
-2. [ ] Create placeholder characters and conversations
+- [ ] Write story outline
+- [ ] Create placeholder characters and conversations
 
 
 ### Eleven
@@ -151,4 +151,4 @@ can be received on the current state.
 
 **Objectives:**
 
-1. [ ] Create maps for story
+- [ ] Create maps for story
