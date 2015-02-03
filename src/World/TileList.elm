@@ -94,10 +94,3 @@ viewTile context (id, tile) =
                 (LocalChannel.localize (always (Remove id)) context.actionChannel)
     in
         World.Tile.view context' tile
-
-
--- SIGNALS
-
---actionChannel : Signal.Channel Action
---actionChannel =
---    Signal.channel NoOp

@@ -56,7 +56,10 @@ update action model =
                 }
 
         ChangeState state ->
-            let editor = if state == Editor then Just (Editor.Editor.default) else Nothing
+            let editor =
+                    if state == Editor
+                        then Just (Editor.Editor.default)
+                        else Nothing
             in
                 { model
                     | state <- log "ChangeState" state
@@ -81,10 +84,10 @@ view : (Int, Int) -> Model -> Graphics.Element.Element
 view (w, h) ({state, editor} as gameState) =
     let forms =
             if | state == Editor -> viewEditor editor
-               | otherwise       -> []
+               | otherwise       -> [ ]
     in
-        Graphics.Element.container w h Graphics.Element.middle <| Graphics.Collage.collage w h
-            forms
+        forms |> Graphics.Collage.collage w h
+              |> Graphics.Element.container w h Graphics.Element.middle
 
 viewEditor : Maybe Editor.Editor.Model -> List Graphics.Collage.Form
 viewEditor editor =

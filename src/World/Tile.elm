@@ -72,18 +72,11 @@ view context ({pos} as model) =
         model
             |> image
             |> Graphics.Input.clickable (LocalChannel.send context.actionChannel (SetType GrassTile))
+--          |> Graphics.Input.hoverable (\on -> LocalChannel.send context.actionChannel (if on then (SetType BlankTile) else (SetType DirtTile)))
             |> Graphics.Collage.toForm
             |> Graphics.Collage.move (x,y)
 --          |> Graphics.Input.hoverable (\on -> Signal.send channel (if on then Hover tile else NoOp))
 --          |> Graphics.Input.clickable (Signal.send channel (Click tile))
-
---viewAsForm : Context -> Model -> Graphics.Collage.Form
---viewAsForm context ({pos} as model) =
---    let (x, y) = World.Position.translateToScreenCoords pos
---    in
---        view context model
---            |> Graphics.Collage.toForm
---            |> Graphics.Collage.move (x,y)
 
 image : Model -> Graphics.Element.Element
 image ({tileType} as model) =

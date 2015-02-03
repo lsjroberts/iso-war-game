@@ -61,17 +61,3 @@ viewWorld context world =
                 (LocalChannel.localize (ModifyWorld) context.actionChannel)
     in
         World.World.view context' world
-
-    --let world' = World.World.view world
-    --in
-    --    world'
-
--- SIGNALS
-
---model : Signal.Signal Model
---model =
---    Signal.foldp update default (Signal.subscribe actionChannel)
-
---actionChannel : Signal.Channel Action
---actionChannel =
---    Signal.channel NoOp

@@ -58,10 +58,3 @@ viewTileList context tileList =
                 (LocalChannel.localize (ModifyTileList) context.actionChannel)
     in
         World.TileList.view context' tileList
-
-
--- SIGNALS
-
---actionChannel : Signal.Channel Action
---actionChannel =
---    Signal.channel NoOp
