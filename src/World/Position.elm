@@ -25,9 +25,9 @@ init x y z =
 area : (Int, Int) -> List Model
 area (w, h) =
     let column x =
-            [0..h] |> List.map (\y -> init x y 0)
+            [0..h-1] |> List.map (\y -> init x y 0)
                    |> List.reverse
-    in [0..w] |> List.concatMap (\x -> column x)
+    in [0..w-1] |> List.concatMap (\x -> column x)
 
 -- TODO: Refactor this to be a configurable value
 zoom : Float
