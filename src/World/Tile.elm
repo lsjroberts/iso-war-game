@@ -50,12 +50,14 @@ type Action
 update : Action -> Model -> Model
 update action model =
     case action of
-        SetType tileType ->
-            { model | tileType <- (log "SetType" tileType) }
-        Move pos ->
-            { model | pos <- pos }
         NoOp ->
             model
+
+        SetType tileType ->
+            { model | tileType <- (log "SetType" tileType) }
+
+        Move pos ->
+            { model | pos <- pos }
 
 
 -- VIEW
@@ -71,12 +73,10 @@ view context ({pos} as model) =
     in
         model
             |> image
-            |> Graphics.Input.clickable (LocalChannel.send context.actionChannel (SetType GrassTile))
---          |> Graphics.Input.hoverable (\on -> LocalChannel.send context.actionChannel (if on then (SetType BlankTile) else (SetType DirtTile)))
+--          |> Graphics.Input.clickable (LocalChannel.send context.actionChannel Click)
+--          |> Graphics.Input.hoverable (\on -> LocalChannel.send context.actionChannel (if on then HoverIn else HoverOut))
             |> Graphics.Collage.toForm
             |> Graphics.Collage.move (x,y)
---          |> Graphics.Input.hoverable (\on -> Signal.send channel (if on then Hover tile else NoOp))
---          |> Graphics.Input.clickable (Signal.send channel (Click tile))
 
 image : Model -> Graphics.Element.Element
 image ({tileType} as model) =

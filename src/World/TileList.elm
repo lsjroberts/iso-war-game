@@ -32,8 +32,8 @@ type Action
     | Insert World.Tile.TileType World.Position.Model
     | Fill World.Tile.TileType (Int, Int)
     | Clear
-    | Remove ID
-    | Modify ID World.Tile.Action
+    | ModifyTile ID World.Tile.Action
+    | RemoveTile ID
 
 update : Action -> Model -> Model
 update action model =
@@ -59,7 +59,7 @@ update action model =
         Clear ->
             { model | tiles <- [] }
 
-        Modify id tileAction ->
+        ModifyTile id tileAction ->
             let updateTile (tileID, tileModel) =
                     if tileID == (log "modify id" id)
                         then (tileID, World.Tile.update (log "tileAction" tileAction) tileModel)
@@ -69,7 +69,7 @@ update action model =
                     tiles <- model.tiles |> List.map updateTile
                 }
 
-        Remove id ->
+        RemoveTile id ->
             { model |
                 tiles <- List.filter (\(tileID, _) -> tileID /= id) model.tiles
             }
@@ -90,7 +90,7 @@ viewTile : Context -> (ID, World.Tile.Model) -> Graphics.Collage.Form
 viewTile context (id, tile) =
     let context' =
             World.Tile.Context
-                (LocalChannel.localize (Modify id) context.actionChannel)
-                (LocalChannel.localize (always (Remove id)) context.actionChannel)
+                (LocalChannel.localize (ModifyTile id) context.actionChannel)
+                (LocalChannel.localize (always (RemoveTile id)) context.actionChannel)
     in
         World.Tile.view context' tile

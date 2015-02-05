@@ -53,3 +53,11 @@ translateToScreenCoords ({x, y, z} as model) =
         ( x'*w + y'*w
         , y'*h - x'*h + z'*tileVerticalSpacing
         )
+
+move : (Int, Int, Int) -> Model -> Model
+move (x, y, z) model =
+    { model
+        | x <- model.x + x
+        , y <- model.y + y
+        , z <- model.z + z
+    }
