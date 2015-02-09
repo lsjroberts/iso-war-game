@@ -17,7 +17,11 @@ type alias Model =
 
 default : Model
 default =
-    { tileList = World.TileList.update (World.TileList.Fill World.Tile.BlankTile (3,3)) World.TileList.default }
+    { tileList =
+        World.TileList.update
+            (World.TileList.Fill World.Tile.BlankTile (8,8))
+            World.TileList.default
+    }
 
 
 -- UPDATE

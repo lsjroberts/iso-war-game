@@ -42,17 +42,33 @@ tileHeight = 64
 tileVerticalSpacing : Float
 tileVerticalSpacing = 16.0
 
-translateToScreenCoords : Model -> (Float, Float)
-translateToScreenCoords ({x, y, z} as model) =
-    let w = (toFloat tileWidth) * zoom / 2
-        h = (toFloat tileHeight) * zoom / 2
+translateToScreen : Model -> (Float, Float)
+translateToScreen ({x, y, z} as model) =
+    let halfWidth = (toFloat tileWidth) * zoom / 2
+        halfHeight = (toFloat tileHeight) * zoom / 2
         x' = toFloat x
         y' = toFloat y
         z' = toFloat z
     in
-        ( x'*w + y'*w
-        , y'*h - x'*h + z'*tileVerticalSpacing
+        ( x'*halfWidth + y'*halfWidth
+        , y'*halfHeight - x'*halfHeight + z'*tileVerticalSpacing
         )
+
+translateScreenToPos : (Float, Float) -> Model
+translateScreenToPos (x, y) =
+    let halfWidth = (toFloat tileWidth) * zoom / 2
+        halfHeight = (toFloat tileHeight) * zoom / 2
+        offsetX = 698
+        offsetY = 371
+        x' = (x-offsetX)/halfWidth - (offsetY-y)/halfWidth |> floor
+        y' = (offsetY-y)/halfHeight + (x-offsetX)/halfHeight |> floor
+        --x' = (x-offsetX)/halfWidth |> floor
+        --y' = (y-offsetY)/(0-halfHeight) |> floor
+        --x' = (x-offsetX)/halfWidth + (y-offsetY)/halfWidth |> floor
+        --y' = (y-offsetY)/(halfHeight) - (x-offsetX)/halfHeight + 0 |> floor
+        z' = 0
+    in
+        init x' y' z'
 
 move : (Int, Int, Int) -> Model -> Model
 move (x, y, z) model =

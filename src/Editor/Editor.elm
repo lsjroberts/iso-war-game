@@ -5,6 +5,7 @@ import Signal
 import World.World
 import Editor.Tool
 import LocalChannel
+import World.Position
 import Editor.Interface
 import Graphics.Collage
 
@@ -41,11 +42,13 @@ update action model =
 
         ModifyWorld worldAction ->
             { model
-                | world <- World.World.update worldAction model.world
+                | world <- model.world |> World.World.update worldAction
             }
 
         ModifyInterface interfaceAction ->
-            model
+            { model
+                | interface <- model.interface |> Editor.Interface.update interfaceAction
+            }
 
 step : Model -> Model
 step ({world, interface} as model) =
@@ -60,6 +63,17 @@ step ({world, interface} as model) =
             , interface <- interface'
         }
 
+handleMouseMove : (Int, Int) -> Model -> Model
+handleMouseMove (x, y) model =
+    let x' = toFloat x
+        y' = toFloat y
+        pos = World.Position.translateScreenToPos (x', y')
+    in
+        model |> update (ModifyInterface (Editor.Interface.ModifyTool (Editor.Tool.Place pos)))
+
+handleMouseDown : Bool -> Model -> Model
+handleMouseDown isDown model =
+    model |> update (ModifyInterface (Editor.Interface.ModifyTool (Editor.Tool.Paint)))
 
 
 -- VIEW

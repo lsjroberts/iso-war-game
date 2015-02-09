@@ -4,7 +4,7 @@ import Debug (log,watch)
 import Signal ((<~))
 
 import Time
-import Input
+import Mouse
 import Signal
 import LocalChannel
 import Editor.Editor
@@ -34,6 +34,8 @@ default =
 type Action
     = NoOp
     | TimeDelta Float
+    | MouseMove (Int, Int)
+    | MouseDown Bool
     | ChangeState State
     | ModifyEditor Editor.Editor.Action
 
@@ -50,6 +52,28 @@ update action model =
                             Just (Editor.Editor.default) -- TODO: This should return Nothing
                         Just editor ->
                             Just (Editor.Editor.step editor)
+            in
+                { model
+                    | editor <- editor
+                }
+
+        MouseMove move ->
+            let editor =
+                    case model.editor of
+                        Nothing -> Nothing
+                        Just editor ->
+                            Just (Editor.Editor.handleMouseMove move editor)
+            in
+                { model
+                    | editor <- editor
+                }
+
+        MouseDown isDown ->
+            let editor =
+                    case model.editor of
+                        Nothing -> Nothing
+                        Just editor ->
+                            Just (Editor.Editor.handleMouseDown isDown editor)
             in
                 { model
                     | editor <- editor
@@ -107,11 +131,16 @@ viewEditor editor =
 model : Signal.Signal Model
 model =
     watch "State" <~
-    Signal.foldp update default
-        (Signal.merge
-            (Signal.subscribe actionChannel)
-            (Signal.map TimeDelta (Time.fps 30))
-        )
+    Signal.foldp update default input
+
+input : Signal.Signal Action
+input =
+    Signal.mergeMany
+        [ Signal.subscribe actionChannel
+        , Signal.map MouseMove (Mouse.position)
+        , Signal.map MouseDown (Mouse.isDown)
+        , Signal.map TimeDelta (Time.fps 30)
+        ]
 
 actionChannel : Signal.Channel Action
 actionChannel =

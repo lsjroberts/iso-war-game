@@ -3,9 +3,10 @@ module Editor.Tool where
 import List
 import World.Tile
 import World.World
-import World.TileList
 import LocalChannel
+import Editor.Assets
 import World.Position
+import World.TileList
 import Editor.Brushes
 import Graphics.Input
 import Graphics.Collage
@@ -60,18 +61,6 @@ update action model =
         Lift ->
             { model | isPainting <- False }
 
-        --Paint point ->
-        --    let paint (world) =
-        --        { world | tileList <- World.TileList.update Insert GrassTile {x=0,y=1,z=0} }
-        --    in
-        --        { model | world <- paint model.world }
-
-        --PaintArea (topLeft, bottomRight) ->
-        --    model
-
-        --Clear ->
-        --    { model | world <- World.World.update Clear model.world }
-
 paint : Model -> World.World.Model -> World.World.Model
 paint model world =
     if model.isPainting
@@ -84,14 +73,16 @@ paint model world =
 
 paintTileList : Model -> World.TileList.Model -> World.TileList.Model
 paintTileList model tileList =
-    let updateTile (tileID, tileModel) =
+    let tileType = Editor.Brushes.getTileTypeFromBrushType model.brushType
+        updateTile (tileID, tileModel) =
             if tileModel.pos == model.pos
-                then (tileID, World.Tile.update World.Tile.SetType World.Tile.GrassTile)
+                then (tileID, World.Tile.update (World.Tile.SetType tileType) tileModel)
                 else (tileID, tileModel)
     in
-        { model
-            | tiles <- model.tiles |> List.map updateTile
+        { tileList
+            | tiles <- tileList.tiles |> List.map updateTile
         }
+
 
 -- VIEW
 
@@ -105,16 +96,19 @@ view context model =
 
 viewHint : Context -> Model -> Graphics.Collage.Form
 viewHint context model =
-    let (x, y) = World.Position.translateToScreenCoords model.pos
+    let coords = World.Position.translateToScreen model.pos
     in
         model
             |> image
-            |> Graphics.Input.clickable (LocalChannel.send context.actionChannel Paint)
+            |> Graphics.Input.clickable (LocalChannel.send context.actionChannel (if model.isPainting then Lift else Paint))
             |> Graphics.Collage.toForm
+            |> Graphics.Collage.move coords
 
 image : Model -> Graphics.Element.Element
 image model =
-    let w = 100 --floor <| (toFloat tileSize) * zoom
-        h = 100 --floor <| (toFloat tileSize) * zoom
-        path = ""
-    in Graphics.Element.image w h path
+    let w = floor <| (toFloat World.Tile.tileSize) * World.Tile.zoom
+        h = floor <| (toFloat World.Tile.tileSize) * World.Tile.zoom
+        path = Editor.Assets.getBrushSrc model.brushType
+    in
+        path |> Graphics.Element.image w h
+             |> Graphics.Element.opacity 0.8

@@ -69,7 +69,7 @@ type alias Context =
 
 view : Context -> Model -> Graphics.Collage.Form
 view context ({pos} as model) =
-    let (x, y) = World.Position.translateToScreenCoords pos
+    let (x, y) = World.Position.translateToScreen pos
     in
         model
             |> image

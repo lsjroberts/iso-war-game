@@ -4,7 +4,7 @@ tiles =
     { blank   = "/assets/world/tiles/_blank.png"
 
     , grass   = "/assets/world/tiles/landscapeTiles_067.png"
-    , dirt    = "/assets/world/tiles/landscapeTiles_073.png"
+    , dirt    = "/assets/world/tiles/landscapeTiles_083.png"
 
     , hillTop = "/assets/world/tiles/landscapeTiles_075.png"
     , hillN   = "/assets/world/tiles/landscapeTiles_099.png"
