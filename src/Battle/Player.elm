@@ -5,10 +5,11 @@ import Debug (log)
 import Battle.Army
 import LocalChannel
 import Battle.Assets
-import Battle.Pointer
+import Battle.Cursor
 import World.Position
 import Graphics.Collage
 import Graphics.Element
+import Battle.CursorList
 
 
 -- MODEL
@@ -16,14 +17,16 @@ import Graphics.Element
 type alias Model =
     { name : String
     , army : Battle.Army.Model
-    , pointer : Battle.Pointer.Model
+    , cursor : Battle.Cursor.Model
+    , movementCursors : Battle.CursorList.Model
     }
 
 demoHuman : Model
 demoHuman =
     { name = "Human"
     , army = Battle.Army.demo
-    , pointer = Battle.Pointer.standard
+    , cursor = Battle.Cursor.standard
+    , movementCursors = Battle.CursorList.default
     }
 
 
@@ -33,7 +36,8 @@ type Action
     = NoOp
     | SelectNextUnit
     | ModifyArmy Battle.Army.Action
-    | ModifyPointer Battle.Pointer.Action
+    | ModifyCursor Battle.Cursor.Action
+    | ModifyMovementCursors Battle.CursorList.Action
 
 update : Action -> Model -> Model
 update action model =
@@ -42,50 +46,40 @@ update action model =
             model
 
         SelectNextUnit ->
-            --model
             let (unitID, unitModel) =
                     Battle.Army.cycleUnitsWithPoints model.army
-                pointer =
-                    Battle.Pointer.update (Battle.Pointer.Place unitModel.pos) model.pointer
                 army =
                     Battle.Army.update (Battle.Army.SelectUnit unitID) model.army
+                cursor =
+                    Battle.Cursor.update (Battle.Cursor.Place unitModel.pos) model.cursor
+                movementCursors =
+                    Battle.CursorList.update (Battle.CursorList.AreaCircle Battle.Cursor.Movement 2 unitModel.pos) model.movementCursors
             in
                 { model
                     | army <- army
-                    , pointer <- pointer
+                    , cursor <- cursor
+                    , movementCursors <- movementCursors
                 }
 
         ModifyArmy armyAction ->
             { model | army <- model.army |> Battle.Army.update armyAction }
 
-        ModifyPointer pointerAction ->
-            model
-            --{ model | pointer <- model.pointer |> Battle.Pointer.update pointerAction }
-            --let pointer = model.pointer |> Battle.Pointer.update (log "pointerAction" pointerAction)
+        ModifyCursor cursorAction ->
+            --model
+            { model | cursor <- model.cursor |> Battle.Cursor.update cursorAction }
+            --let cursor = model.cursor |> Battle.Cursor.update (log "cursorAction" cursorAction)
             --    army =
-            --        if pointerAction == Battle.Pointer.SelectUnit
-            --            then Battle.Army.update (Battle.Army.SelectUnitAtPosition pointer.pos) model.army
+            --        if cursorAction == Battle.Cursor.SelectUnit
+            --            then Battle.Army.update (Battle.Army.SelectUnitAtPosition cursor.pos) model.army
             --            else model.army
             --in
             --    { model
-            --        | pointer <- pointer
+            --        | cursor <- cursor
             --        , army <- army
             --    }
 
-handleKeyPressed : Int -> Model -> Model
-handleKeyPressed key model =
-    let action =
-            if | key == 190 -> SelectNextUnit
-               | otherwise -> NoOp
-        --model =
-        --    model |> update action
-    in
-        model |> update action
-        --{ model | pointer <- model.pointer |> Battle.Pointer.handleKeyPressed key }
-    --{ model
-    --    | pointer <- model.pointer |> Battle.Pointer.handleKeyPressed key
-    --    , army <- model.army |> Battle.Army.handleKeyPressed key
-    --}
+        ModifyMovementCursors cursorsAction ->
+            { model | movementCursors <- model.movementCursors |> Battle.CursorList.update cursorsAction }
 
 
 -- VIEW
@@ -97,7 +91,8 @@ type alias Context =
 view : Context -> Model -> Graphics.Collage.Form
 view context model =
     let forms =
-            [ viewPointer context model.pointer
+            [ viewCursor context model.cursor
+            , viewMovementCursors context model.movementCursors
             , viewArmy context model.army
             ]
     in
@@ -111,10 +106,18 @@ viewArmy context army =
     in
         Battle.Army.view context' army
 
-viewPointer : Context -> Battle.Pointer.Model -> Graphics.Collage.Form
-viewPointer context pointer =
+viewCursor : Context -> Battle.Cursor.Model -> Graphics.Collage.Form
+viewCursor context cursor =
     let context' =
-            Battle.Pointer.Context
-                (LocalChannel.localize (ModifyPointer) context.actionChannel)
+            Battle.Cursor.Context
+                (LocalChannel.localize (ModifyCursor) context.actionChannel)
     in
-        Battle.Pointer.view context' pointer
+        Battle.Cursor.view context' cursor
+
+viewMovementCursors : Context -> Battle.CursorList.Model -> Graphics.Collage.Form
+viewMovementCursors context cursors =
+    let context' =
+            Battle.CursorList.Context
+                (LocalChannel.localize (ModifyMovementCursors) context.actionChannel)
+    in
+        Battle.CursorList.view context' cursors

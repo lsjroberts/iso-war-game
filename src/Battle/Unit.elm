@@ -125,9 +125,9 @@ image ({unitType, selected} as model) =
         path = unitPath unitType
     in
         path |> Graphics.Element.image w h
-             |> if selected
-                    then Graphics.Element.opacity 1
-                    else Graphics.Element.opacity 0.5
+             --|> if selected
+             --       then Graphics.Element.opacity 1
+             --       else Graphics.Element.opacity 0.5
 
 unitPath : UnitType -> String
 unitPath unitType =

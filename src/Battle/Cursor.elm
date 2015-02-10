@@ -1,4 +1,4 @@
-module Battle.Pointer where
+module Battle.Cursor where
 
 import LocalChannel
 import Battle.Assets
@@ -9,17 +9,24 @@ import Graphics.Element
 
 -- MODEL
 
-type PointerType
+type CursorType
     = Standard
+    | Movement
 
 type alias Model =
-    { pointerType : PointerType
+    { cursorType : CursorType
     , pos : World.Position.Model
+    }
+
+init : CursorType -> World.Position.Model -> Model
+init cursorType pos =
+    { cursorType = cursorType
+    , pos = pos
     }
 
 standard : Model
 standard =
-    { pointerType = Standard
+    { cursorType = Standard
     , pos = World.Position.init 0 0 0
     }
 
@@ -81,13 +88,14 @@ image : Model -> Graphics.Element.Element
 image model =
     let w = floor <| (toFloat 131) * 0.5
         h = floor <| (toFloat 131) * 0.5
-        path = pointerPath model.pointerType
+        path = cursorPath model.cursorType
     in
         path |> Graphics.Element.image w h
 
-pointerPath : PointerType -> String
-pointerPath pointerType =
-    let pointers = Battle.Assets.pointers
+cursorPath : CursorType -> String
+cursorPath cursorType =
+    let cursors = Battle.Assets.cursors
     in
-        case pointerType of
-            Standard -> pointers.standard
+        case cursorType of
+            Standard -> cursors.standard
+            Movement -> cursors.movement

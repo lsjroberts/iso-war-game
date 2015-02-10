@@ -1,6 +1,5 @@
 module Editor.Editor where
 
-import Input
 import Signal
 import World.World
 import Editor.Tool

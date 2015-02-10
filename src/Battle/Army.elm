@@ -26,10 +26,10 @@ type alias Points =
 demo : Model
 demo =
     { units =
-        [ (1, Battle.Unit.infantry (World.Position.init 1 1 0))
-        , (2, Battle.Unit.infantry (World.Position.init 2 1 0))
-        , (3, Battle.Unit.infantry (World.Position.init 2 2 0))
-        , (4, Battle.Unit.infantry (World.Position.init 3 2 0))
+        [ (1, Battle.Unit.infantry (World.Position.init 3 3 0))
+        , (2, Battle.Unit.infantry (World.Position.init 5 3 0))
+        , (3, Battle.Unit.infantry (World.Position.init 4 4 0))
+        , (4, Battle.Unit.infantry (World.Position.init 5 5 0))
         ]
     , nextUnitID = 5
     , selectedUnitID = 0
@@ -109,15 +109,6 @@ update action model =
                 { model
                     | units <- model.units |> List.map selectUnit
                 }
-
---handleKeyPressed : Int -> Model -> Model
---handleKeyPressed key model =
---    let handleKeyPressedUnit (unitID, unitModel) =
---            (unitID, unitModel |> Battle.Unit.handleKeyPressed key)
---    in
---        { model
---            | units <- model.units |> List.map handleKeyPressedUnit
---        }
 
 
 -- VIEW

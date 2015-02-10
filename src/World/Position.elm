@@ -29,6 +29,16 @@ area (w, h) =
                    |> List.reverse
     in [0..w-1] |> List.concatMap (\x -> column x)
 
+circle : Int -> Model -> List Model
+circle r centre =
+    let column x =
+            [(0-r)..r]
+                |> List.map (\y -> init x (y + centre.y) 0)
+                |> List.reverse
+    in
+        [(0-r)..r]
+            |> List.concatMap (\x -> column (x + centre.x))
+
 -- TODO: Refactor this to be a configurable value
 zoom : Float
 zoom = 0.5

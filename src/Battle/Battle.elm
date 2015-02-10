@@ -7,7 +7,6 @@ import Signal
 import World.World
 import LocalChannel
 import Battle.Player
-import Battle.Pointer
 import World.Position
 import Graphics.Collage
 
@@ -54,8 +53,8 @@ update action model =
 
         ModifyPlayer id playerAction ->
             let updatePlayer (playerID, playerModel) =
-                    if playerID == (log "modify id" id)
-                        then (playerID, Battle.Player.update (log "playerAction" playerAction) playerModel)
+                    if playerID == id
+                        then (playerID, Battle.Player.update playerAction playerModel)
                         else (playerID, playerModel)
             in
                 { model |
@@ -75,22 +74,22 @@ step ({world} as model) =
             --, interface <- interface'
         }
 
-handleKeysDown : List Int -> Model -> Model
-handleKeysDown keys model =
-    model --List.map (\key -> handleKeyDown key model) keys
+--handleKeysDown : List Int -> Model -> Model
+--handleKeysDown keys model =
+--    model --List.map (\key -> handleKeyDown key model) keys
 
-handleKeyDown : Int -> Model -> Model
-handleKeyDown key model =
-    model
+--handleKeyDown : Int -> Model -> Model
+--handleKeyDown key model =
+--    model
 
-handleKeyPressed : Int -> Model -> Model
-handleKeyPressed key model =
-    let handleKeyPressedPlayer (playerID, playerModel) =
-            (playerID, playerModel |> Battle.Player.handleKeyPressed key)
-    in
-        { model
-            | players <- model.players |> List.map handleKeyPressedPlayer
-        }
+--handleKeyPressed : Int -> Model -> Model
+--handleKeyPressed key model =
+--    let handleKeyPressedPlayer (playerID, playerModel) =
+--            (playerID, playerModel |> Battle.Player.handleKeyPressed key)
+--    in
+--        { model
+--            | players <- model.players |> List.map handleKeyPressedPlayer
+--        }
 
 
 -- VIEW

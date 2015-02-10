@@ -9,6 +9,7 @@ import Signal
 import Keyboard
 import LocalChannel
 import Battle.Battle
+import Battle.Player
 import Editor.Editor
 import Graphics.Collage
 import Graphics.Element
@@ -19,15 +20,17 @@ import Graphics.Element
 type State = Play | Pause | Editor
 
 type alias Model =
-    { state:State
-    , battle:Maybe Battle.Battle.Model
-    , editor:Maybe Editor.Editor.Model }
+    { state : State
+    , battle : Maybe Battle.Battle.Model
+    , editor : Maybe Editor.Editor.Model
+    }
 
 default : Model
 default =
     { state = Play
     , battle = Nothing
-    , editor = Nothing }
+    , editor = Nothing
+    }
 
 
 ---- UPDATE
@@ -100,26 +103,10 @@ update action model =
                 }
 
         KeysDown keys ->
-            let battle =
-                    case model.battle of
-                        Nothing -> Nothing
-                        Just battle ->
-                            Just (Battle.Battle.handleKeysDown keys battle)
-            in
-                { model
-                    | battle <- battle
-                }
+            keysDown keys model
 
         KeyPressed key ->
-            let battle =
-                    case model.battle of
-                        Nothing -> Nothing
-                        Just battle ->
-                            Just (Battle.Battle.handleKeyPressed key battle)
-            in
-                { model
-                    | battle <- battle
-                }
+            keyPressed key model
 
         ChangeState state ->
             let editor =
@@ -214,3 +201,21 @@ input =
 actionChannel : Signal.Channel Action
 actionChannel =
     Signal.channel NoOp
+
+
+-- INPUT
+
+keysDown : List Int -> Model -> Model
+keysDown keys model =
+    model
+
+keyPressed : Int -> Model -> Model
+keyPressed key model =
+    model |> keyPressedBattle key
+
+keyPressedBattle : Int -> Model -> Model
+keyPressedBattle key model =
+    if | key == 190 ->
+            model |> update (ModifyBattle (Battle.Battle.ModifyPlayer 1 (Battle.Player.SelectNextUnit)))
+       | otherwise ->
+            model
