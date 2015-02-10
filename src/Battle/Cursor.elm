@@ -12,6 +12,7 @@ import Graphics.Element
 type CursorType
     = Standard
     | Movement
+    | Attack
 
 type alias Model =
     { cursorType : CursorType
@@ -56,17 +57,17 @@ update action model =
         SelectUnit ->
             model
 
-handleKeyPressed : Int -> Model -> Model
-handleKeyPressed key model =
-    let action =
-            if | key == 37 -> Move (-1, 0, 0)
-               | key == 38 -> Move (0, 1, 0)
-               | key == 39 -> Move (1, 0, 0)
-               | key == 40 -> Move (0, -1, 0)
-               | key == 13 -> SelectUnit
-               | otherwise -> NoOp
-    in
-        model-- |> update action
+--handleKeyPressed : Int -> Model -> Model
+--handleKeyPressed key model =
+--    let action =
+--            if | key == 37 -> Move (-1, 0, 0)
+--               | key == 38 -> Move (0, 1, 0)
+--               | key == 39 -> Move (1, 0, 0)
+--               | key == 40 -> Move (0, -1, 0)
+--               | key == 13 -> SelectUnit
+--               | otherwise -> NoOp
+--    in
+--        model-- |> update action
 
 
 -- VIEW
@@ -99,3 +100,4 @@ cursorPath cursorType =
         case cursorType of
             Standard -> cursors.standard
             Movement -> cursors.movement
+            Attack -> cursors.attack

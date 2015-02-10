@@ -78,6 +78,7 @@ type Action
     | ToggleSelect
     | Select
     | Unselect
+    | Place World.Position.Model
 
 update : Action -> Model -> Model
 update action model =
@@ -93,6 +94,9 @@ update action model =
 
         Unselect ->
             { model | selected <- False }
+
+        Place pos ->
+            { model | pos <- pos }
 
 --handleKeyPressed : Int -> Model -> Model
 --handleKeyPressed key model =

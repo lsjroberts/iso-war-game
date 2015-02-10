@@ -35,6 +35,12 @@ demo =
     , selectedUnitID = 0
     }
 
+getSelectedUnit : Model -> (ID, Battle.Unit.Model)
+getSelectedUnit model =
+    model.units
+        |> List.filter (\(id, u) -> id == model.selectedUnitID)
+        |> List.head
+
 cycleUnits : Model -> (ID, Battle.Unit.Model)
 cycleUnits model =
     model.units
@@ -67,6 +73,7 @@ type Action
     | UnselectUnit ID
     | UnselectAll
     | SelectUnitAtPosition World.Position.Model
+    | MoveUnit ID World.Position.Model
 
 
 update : Action -> Model -> Model
@@ -106,9 +113,15 @@ update action model =
                         then (unitID, Battle.Unit.update Battle.Unit.ToggleSelect unitModel)
                         else (unitID, unitModel)
             in
-                { model
-                    | units <- model.units |> List.map selectUnit
-                }
+                { model | units <- model.units |> List.map selectUnit }
+
+        MoveUnit id target ->
+            let moveUnit (unitID, unitModel) =
+                    if unitID == id
+                        then (unitID, Battle.Unit.update (Battle.Unit.Place target) unitModel)
+                        else (unitID, unitModel)
+            in
+                { model | units <- model.units |> List.map moveUnit }
 
 
 -- VIEW

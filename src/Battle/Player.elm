@@ -19,6 +19,7 @@ type alias Model =
     , army : Battle.Army.Model
     , cursor : Battle.Cursor.Model
     , movementCursors : Battle.CursorList.Model
+    , attackCursors : Battle.CursorList.Model
     }
 
 demoHuman : Model
@@ -27,6 +28,7 @@ demoHuman =
     , army = Battle.Army.demo
     , cursor = Battle.Cursor.standard
     , movementCursors = Battle.CursorList.default
+    , attackCursors = Battle.CursorList.default
     }
 
 
@@ -35,9 +37,12 @@ demoHuman =
 type Action
     = NoOp
     | SelectNextUnit
+    | ToggleSelectedUnitCursorMode
+    | EnactCursor
     | ModifyArmy Battle.Army.Action
     | ModifyCursor Battle.Cursor.Action
     | ModifyMovementCursors Battle.CursorList.Action
+    | ModifyAttackCursors Battle.CursorList.Action
 
 update : Action -> Model -> Model
 update action model =
@@ -54,12 +59,38 @@ update action model =
                     Battle.Cursor.update (Battle.Cursor.Place unitModel.pos) model.cursor
                 movementCursors =
                     Battle.CursorList.update (Battle.CursorList.AreaCircle Battle.Cursor.Movement 2 unitModel.pos) model.movementCursors
+                attackCursors =
+                    Battle.CursorList.update Battle.CursorList.Clear model.attackCursors
             in
                 { model
                     | army <- army
                     , cursor <- cursor
                     , movementCursors <- movementCursors
+                    , attackCursors <- attackCursors
                 }
+
+        ToggleSelectedUnitCursorMode ->
+            let (unitID, unitModel) =
+                    Battle.Army.getSelectedUnit model.army
+                movementCursors =
+                    Battle.CursorList.update Battle.CursorList.Clear model.movementCursors
+                attackCursors =
+                    Battle.CursorList.update (Battle.CursorList.AreaCircle Battle.Cursor.Attack 1 unitModel.pos) model.attackCursors
+            in
+                { model
+                    | movementCursors <- movementCursors
+                    , attackCursors <- attackCursors
+                }
+
+        EnactCursor ->
+            let (unitID, unitModel) =
+                    Battle.Army.getSelectedUnit model.army
+                cursor =
+                    model.cursor
+            in
+                model
+                    |> update (ModifyArmy (Battle.Army.MoveUnit unitID cursor.pos))
+                    |> update SelectNextUnit
 
         ModifyArmy armyAction ->
             { model | army <- model.army |> Battle.Army.update armyAction }
@@ -81,6 +112,9 @@ update action model =
         ModifyMovementCursors cursorsAction ->
             { model | movementCursors <- model.movementCursors |> Battle.CursorList.update cursorsAction }
 
+        ModifyAttackCursors cursorsAction ->
+            { model | attackCursors <- model.attackCursors |> Battle.CursorList.update cursorsAction }
+
 
 -- VIEW
 
@@ -93,6 +127,7 @@ view context model =
     let forms =
             [ viewCursor context model.cursor
             , viewMovementCursors context model.movementCursors
+            , viewAttackCursors context model.attackCursors
             , viewArmy context model.army
             ]
     in
@@ -119,5 +154,13 @@ viewMovementCursors context cursors =
     let context' =
             Battle.CursorList.Context
                 (LocalChannel.localize (ModifyMovementCursors) context.actionChannel)
+    in
+        Battle.CursorList.view context' cursors
+
+viewAttackCursors : Context -> Battle.CursorList.Model -> Graphics.Collage.Form
+viewAttackCursors context cursors =
+    let context' =
+            Battle.CursorList.Context
+                (LocalChannel.localize (ModifyAttackCursors) context.actionChannel)
     in
         Battle.CursorList.view context' cursors

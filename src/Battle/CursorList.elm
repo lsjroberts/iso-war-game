@@ -30,6 +30,7 @@ default =
 
 type Action
     = NoOp
+    | Clear
     | Insert Battle.Cursor.Model
     | AreaCircle Battle.Cursor.CursorType Int World.Position.Model
     | ModifyCursor ID Battle.Cursor.Action
@@ -40,6 +41,12 @@ update action model =
         NoOp ->
             model
 
+        Clear ->
+            { model
+                | cursors <- [ ]
+                , nextID <- 0
+            }
+
         Insert cursor ->
             model
 
@@ -47,9 +54,9 @@ update action model =
             let area = World.Position.circle radius centre
                 cursors' = area |> List.map (\pos -> Battle.Cursor.init cursorType pos)
             in
-                { model |
-                    cursors <- List.indexedMap (,) cursors',
-                    nextID <- List.length cursors'
+                { model
+                    | cursors <- List.indexedMap (,) cursors'
+                    , nextID <- List.length cursors'
                 }
 
         ModifyCursor id cursorAction ->

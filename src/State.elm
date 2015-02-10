@@ -9,6 +9,7 @@ import Signal
 import Keyboard
 import LocalChannel
 import Battle.Battle
+import Battle.Cursor
 import Battle.Player
 import Editor.Editor
 import Graphics.Collage
@@ -216,6 +217,24 @@ keyPressed key model =
 keyPressedBattle : Int -> Model -> Model
 keyPressedBattle key model =
     if | key == 190 ->
-            model |> update (ModifyBattle (Battle.Battle.ModifyPlayer 1 (Battle.Player.SelectNextUnit)))
+            model |> modifyHuman Battle.Player.SelectNextUnit
+       | key == 37 ->
+            model |> modifyCursor (Battle.Cursor.Move (-1, 0, 0))
+       | key == 38 ->
+            model |> modifyCursor (Battle.Cursor.Move (0, 1, 0))
+       | key == 39 ->
+            model |> modifyCursor (Battle.Cursor.Move (1, 0, 0))
+       | key == 40 ->
+            model |> modifyCursor (Battle.Cursor.Move (0, -1, 0))
+       | key == 81 ->
+            model |> modifyHuman Battle.Player.ToggleSelectedUnitCursorMode
+       | key == 13 ->
+            model |> modifyHuman Battle.Player.EnactCursor
        | otherwise ->
             model
+
+modifyHuman action =
+    update (ModifyBattle (Battle.Battle.ModifyPlayer 1 action))
+
+modifyCursor action =
+    modifyHuman (Battle.Player.ModifyCursor action)
