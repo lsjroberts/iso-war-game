@@ -16,7 +16,8 @@ type alias Model =
     , nextID : ID
     }
 
-type alias ID = Int
+type alias ID =
+    Int
 
 default : Model
 default =
@@ -30,6 +31,7 @@ default =
 type Action
     = NoOp
     | Insert World.Tile.TileType World.Position.Model
+    | Draw World.Tile.TileType (List World.Position.Model)
     | Fill World.Tile.TileType (Int, Int)
     | Clear
     | ModifyTile ID World.Tile.Action
@@ -47,6 +49,14 @@ update action model =
                     nextID <- model.nextID + 1
                 }
 
+        Draw tileType positions ->
+            let tiles' = positions |> List.map (\pos -> World.Tile.init tileType pos)
+            in
+                { model |
+                    tiles <- List.indexedMap (,) tiles',
+                    nextID <- model.nextID + List.length tiles'
+                }
+
         Fill tileType dimensions ->
             let area = World.Position.area dimensions
                 tiles' = area |> List.map (\pos -> World.Tile.init tileType pos)
@@ -61,8 +71,8 @@ update action model =
 
         ModifyTile id tileAction ->
             let updateTile (tileID, tileModel) =
-                    if tileID == (log "modify id" id)
-                        then (tileID, World.Tile.update (log "tileAction" tileAction) tileModel)
+                    if tileID == id
+                        then (tileID, World.Tile.update tileAction tileModel)
                         else (tileID, tileModel)
             in
                 { model |

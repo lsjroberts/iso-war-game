@@ -73,10 +73,11 @@ view context ({pos} as model) =
     in
         model
             |> image
---          |> Graphics.Input.clickable (LocalChannel.send context.actionChannel Click)
---          |> Graphics.Input.hoverable (\on -> LocalChannel.send context.actionChannel (if on then HoverIn else HoverOut))
             |> Graphics.Collage.toForm
             |> Graphics.Collage.move (x,y)
+
+--          |> Graphics.Input.clickable (LocalChannel.send context.actionChannel Click)
+--          |> Graphics.Input.hoverable (\on -> LocalChannel.send context.actionChannel (if on then HoverIn else HoverOut))
 
 image : Model -> Graphics.Element.Element
 image ({tileType} as model) =

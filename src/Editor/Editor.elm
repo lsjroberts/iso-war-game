@@ -17,6 +17,7 @@ type alias Model =
     , interface : Editor.Interface.Model
     }
 
+default : Model
 default =
     { world = World.World.default
     , interface = Editor.Interface.default
@@ -29,10 +30,6 @@ type Action
     = NoOp
     | ModifyWorld World.World.Action
     | ModifyInterface Editor.Interface.Action
-
---handleInput : Input.Model -> Model -> Model
---handleInput input model =
---    model |> update NoOp
 
 update : Action -> Model -> Model
 update action model =
@@ -83,7 +80,7 @@ type alias Context =
     }
 
 view : Context -> Model -> Graphics.Collage.Form
-view context ({world} as model) =
+view context model =
     let forms =
             [ viewWorld context model.world
             , viewInterface context model.interface ]

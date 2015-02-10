@@ -23,6 +23,14 @@ default =
             World.TileList.default
     }
 
+demo : Model
+demo =
+    { tileList =
+        World.TileList.update
+            (World.TileList.Fill World.Tile.GrassTile (16,16))
+            World.TileList.default
+    }
+
 
 -- UPDATE
 
