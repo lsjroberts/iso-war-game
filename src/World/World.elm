@@ -31,6 +31,11 @@ demo =
             World.TileList.default
     }
 
+areaWithCost : Model -> Int -> World.Position.Model -> List (Int, World.Position.Model)
+areaWithCost world points centre =
+    World.TileList.areaWithCost world.tileList points centre
+        |> List.map (\(id, tile) -> (id, tile.pos))
+
 
 -- UPDATE
 

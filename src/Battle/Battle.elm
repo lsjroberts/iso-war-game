@@ -54,7 +54,7 @@ update action model =
         ModifyPlayer id playerAction ->
             let updatePlayer (playerID, playerModel) =
                     if playerID == id
-                        then (playerID, Battle.Player.update playerAction playerModel)
+                        then (playerID, Battle.Player.update playerAction model.world playerModel)
                         else (playerID, playerModel)
             in
                 { model |
@@ -73,23 +73,6 @@ step ({world} as model) =
             | world <- world'
             --, interface <- interface'
         }
-
---handleKeysDown : List Int -> Model -> Model
---handleKeysDown keys model =
---    model --List.map (\key -> handleKeyDown key model) keys
-
---handleKeyDown : Int -> Model -> Model
---handleKeyDown key model =
---    model
-
---handleKeyPressed : Int -> Model -> Model
---handleKeyPressed key model =
---    let handleKeyPressedPlayer (playerID, playerModel) =
---            (playerID, playerModel |> Battle.Player.handleKeyPressed key)
---    in
---        { model
---            | players <- model.players |> List.map handleKeyPressedPlayer
---        }
 
 
 -- VIEW

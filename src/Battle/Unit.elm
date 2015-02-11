@@ -2,6 +2,7 @@ module Battle.Unit where
 
 import Debug (log)
 
+import World.Tile
 import LocalChannel
 import Battle.Assets
 import World.Position
@@ -55,6 +56,26 @@ actionPointsForUnitType unitType =
     case unitType of
         Infantry -> 2
         Tank -> 2
+
+tileTypeCostForUnitType : UnitType -> World.Tile.TileType -> Points
+tileTypeCostForUnitType unitType tileType =
+    case unitType of
+        Infantry ->
+            tileTypeCostForInfantry tileType
+        Tank ->
+            tileTypeCostForTank tileType
+
+tileTypeCostForInfantry : World.Tile.TileType -> Points
+tileTypeCostForInfantry tileType =
+    case tileType of
+        World.Tile.GrassTile -> 1
+        World.Tile.DirtTile  -> 1
+
+tileTypeCostForTank : World.Tile.TileType -> Points
+tileTypeCostForTank tileType =
+    case tileType of
+        World.Tile.GrassTile -> 1
+        World.Tile.DirtTile  -> 1
 
 hasPoints : Model -> Bool
 hasPoints model =

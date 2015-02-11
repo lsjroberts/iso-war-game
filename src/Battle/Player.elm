@@ -2,6 +2,7 @@ module Battle.Player where
 
 import Debug (log)
 
+import World.World
 import Battle.Army
 import LocalChannel
 import Battle.Assets
@@ -44,8 +45,8 @@ type Action
     | ModifyMovementCursors Battle.CursorList.Action
     | ModifyAttackCursors Battle.CursorList.Action
 
-update : Action -> Model -> Model
-update action model =
+update : Action -> World.World.Model -> Model -> Model
+update action world model =
     case action of
         NoOp ->
             model
@@ -58,7 +59,7 @@ update action model =
                 cursor =
                     Battle.Cursor.update (Battle.Cursor.Place unitModel.pos) model.cursor
                 movementCursors =
-                    Battle.CursorList.update (Battle.CursorList.AreaCircle Battle.Cursor.Movement 2 unitModel.pos) model.movementCursors
+                    Battle.CursorList.update (Battle.CursorList.AreaWithCost Battle.Cursor.Movement 2 world unitModel.pos) model.movementCursors
                 attackCursors =
                     Battle.CursorList.update Battle.CursorList.Clear model.attackCursors
             in
@@ -89,8 +90,8 @@ update action model =
                     model.cursor
             in
                 model
-                    |> update (ModifyArmy (Battle.Army.MoveUnit unitID cursor.pos))
-                    |> update SelectNextUnit
+                    |> update (ModifyArmy (Battle.Army.MoveUnit unitID cursor.pos)) world
+                    |> update SelectNextUnit world
 
         ModifyArmy armyAction ->
             { model | army <- model.army |> Battle.Army.update armyAction }

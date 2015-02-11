@@ -3,6 +3,7 @@ module Battle.CursorList where
 import Debug (log)
 
 import List
+import World.World
 import LocalChannel
 import Battle.Cursor
 import World.Position
@@ -33,6 +34,7 @@ type Action
     | Clear
     | Insert Battle.Cursor.Model
     | AreaCircle Battle.Cursor.CursorType Int World.Position.Model
+    | AreaWithCost Battle.Cursor.CursorType Int World.World.Model World.Position.Model
     | ModifyCursor ID Battle.Cursor.Action
 
 update : Action -> Model -> Model
@@ -53,6 +55,15 @@ update action model =
         AreaCircle cursorType radius centre ->
             let area = World.Position.circle radius centre
                 cursors' = area |> List.map (\pos -> Battle.Cursor.init cursorType pos)
+            in
+                { model
+                    | cursors <- List.indexedMap (,) cursors'
+                    , nextID <- List.length cursors'
+                }
+
+        AreaWithCost cursorType points world centre ->
+            let area = World.World.areaWithCost world points centre
+                cursors' = area |> List.map (\(cost, pos) -> Battle.Cursor.init cursorType pos)
             in
                 { model
                     | cursors <- List.indexedMap (,) cursors'

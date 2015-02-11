@@ -39,6 +39,7 @@ circle r centre =
         [(0-r)..r]
             |> List.concatMap (\x -> column (x + centre.x))
 
+
 -- TODO: Refactor this to be a configurable value
 zoom : Float
 zoom = 0.5
