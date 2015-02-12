@@ -54,14 +54,17 @@ initCosts start tiles =
 fillCosts : CostedTile -> List CostedTile -> List CostedTile
 fillCosts first tiles =
     fillNeighbourCosts first tiles
-        |> List.concatMap (\n -> fillNeighbourCosts n tiles)
+--        |> List.concatMap (\n -> fillNeighbourCosts n tiles)
 
 fillNeighbourCosts : CostedTile -> List CostedTile -> List CostedTile
 fillNeighbourCosts current tiles =
-    tiles
-        |> List.filter (isCostedNeighbour current)
-        |> List.map (setCost current)
---        |> List.map (\tile -> fillCosts tile tiles)
+    let neighbours =
+            tiles
+                |> List.filter (isCostedNeighbour current)
+    in
+        neighbours
+            |> List.map (setCost current)
+--            |> List.map (\tile -> fillNeighbourCosts tile tiles)
 
 setCost : CostedTile -> CostedTile -> CostedTile
 setCost (currentCost, currentTile) (targetCost, targetTile) =
@@ -94,6 +97,7 @@ type Action
     | Draw World.Tile.TileType (List World.Position.Model)
     | Fill World.Tile.TileType (Int, Int)
     | Clear
+    | Offset (Float, Float)
     | ModifyTile ID World.Tile.Action
     | RemoveTile ID
 

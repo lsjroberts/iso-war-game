@@ -13,7 +13,9 @@ import Graphics.Collage
 -- MODEL
 
 type alias Model =
-    { tileList : World.TileList.Model }
+    { tileList : World.TileList.Model
+    , offset : (Float, Float)
+    }
 
 default : Model
 default =
@@ -21,6 +23,7 @@ default =
         World.TileList.update
             (World.TileList.Fill World.Tile.BlankTile (8,8))
             World.TileList.default
+    , offset = (0, 0)
     }
 
 demo : Model
@@ -29,6 +32,7 @@ demo =
         World.TileList.update
             (World.TileList.Fill World.Tile.GrassTile (16,16))
             World.TileList.default
+    , offset = (0, 0)
     }
 
 areaWithCost : Model -> Int -> World.Position.Model -> List (Int, World.Position.Model)
@@ -41,16 +45,11 @@ areaWithCost world points centre =
 
 type Action
     = NoOp
-    | Offset (Int, Int)
     | ModifyTileList World.TileList.Action
 
 update : Action -> Model -> Model
 update action model =
     case action of
-        Offset (x,y) ->
-            model
-            --{ model | tileList <- List.map (World.Tile.update Offset) model.tiles }
-
         ModifyTileList tileListAction ->
             { model
                 | tileList <- World.TileList.update tileListAction model.tileList
@@ -65,8 +64,9 @@ type alias Context =
 
 view : Context -> Model -> Graphics.Collage.Form
 view context model =
-    model.tileList |> viewTileList context
---                   |> Graphics.Collage.move -- ToDo
+    model.tileList
+        |> viewTileList context
+        |> Graphics.Collage.move model.offset
 
 viewTileList : Context -> World.TileList.Model -> Graphics.Collage.Form
 viewTileList context tileList =

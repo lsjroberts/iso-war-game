@@ -56,8 +56,8 @@ can be received on the current state.
 
 **Objectives:**
 
-- [ ] Add units
-- [ ] Add unit controls (1st iteration)
+- [x] Add units
+- [x] Add unit controls (1st iteration)
 
 
 ### Four

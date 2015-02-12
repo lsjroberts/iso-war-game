@@ -6,14 +6,23 @@ import Signal ((<~))
 import Time
 import Mouse
 import Signal
+import Window
 import Keyboard
 import LocalChannel
+import Graphics.Collage
+import Graphics.Element
+
+import Helpers
+
 import Battle.Battle
 import Battle.Cursor
 import Battle.Player
+
+import Editor.Tool
 import Editor.Editor
-import Graphics.Collage
-import Graphics.Element
+import Editor.Interface
+
+import World.Position
 
 
 -- MODEL
@@ -39,6 +48,7 @@ default =
 type Action
     = NoOp
     | TimeDelta Float
+    | NearEdge (Float, Float)
     | MouseMove (Int, Int)
     | MouseDown Bool
     | KeysDown (List Int)
@@ -81,27 +91,14 @@ update action model =
                     , battle <- battle
                 }
 
+        NearEdge near ->
+            nearEdge near model
+
         MouseMove move ->
-            let editor =
-                    case model.editor of
-                        Nothing -> Nothing
-                        Just editor ->
-                            Just (Editor.Editor.handleMouseMove move editor)
-            in
-                { model
-                    | editor <- editor
-                }
+            mouseMove move model
 
         MouseDown isDown ->
-            let editor =
-                    case model.editor of
-                        Nothing -> Nothing
-                        Just editor ->
-                            Just (Editor.Editor.handleMouseDown isDown editor)
-            in
-                { model
-                    | editor <- editor
-                }
+            mouseDown isDown model
 
         KeysDown keys ->
             keysDown keys model
@@ -192,6 +189,7 @@ input : Signal.Signal Action
 input =
     Signal.mergeMany
         [ Signal.subscribe actionChannel
+        , Signal.map NearEdge (Signal.sampleOn (Time.fps 30) (Mouse.position |> Signal.map2 (Helpers.nearEdge 20) Window.dimensions))
         , Signal.map MouseMove (Mouse.position)
         , Signal.map MouseDown (Mouse.isDown)
         , Signal.map KeyPressed (Keyboard.lastPressed)
@@ -206,6 +204,18 @@ actionChannel =
 
 -- INPUT
 
+nearEdge : (Float, Float) -> Model -> Model
+nearEdge near model =
+    model |> nearEdgeBattle near
+
+mouseMove : (Int, Int) -> Model -> Model
+mouseMove move model =
+    model |> mouseMoveEditor move
+
+mouseDown : Bool -> Model -> Model
+mouseDown isDown model =
+    model |> mouseDownEditor isDown
+
 keysDown : List Int -> Model -> Model
 keysDown keys model =
     model
@@ -213,6 +223,25 @@ keysDown keys model =
 keyPressed : Int -> Model -> Model
 keyPressed key model =
     model |> keyPressedBattle key
+
+
+nearEdgeBattle : (Float, Float) -> Model -> Model
+nearEdgeBattle near model =
+    model |> modifyBattle (Battle.Battle.Offset near)
+
+mouseMoveEditor : (Int, Int) -> Model -> Model
+mouseMoveEditor (x, y) model =
+    let x' = toFloat x
+        y' = toFloat y
+        pos = World.Position.translateScreenToPos (x', y')
+    in
+        model |> modifyEditorTool (Editor.Tool.Place pos)
+
+mouseDownEditor : Bool -> Model -> Model
+mouseDownEditor isDown model =
+    if isDown
+        then model |> modifyEditorTool Editor.Tool.Paint
+        else model
 
 keyPressedBattle : Int -> Model -> Model
 keyPressedBattle key model =
@@ -233,8 +262,24 @@ keyPressedBattle key model =
        | otherwise ->
             model
 
+
+-- MODIFY
+
+modifyEditor action =
+    update (ModifyEditor action)
+
+modifyEditorInterface action =
+    modifyEditor (Editor.Editor.ModifyInterface action)
+
+modifyEditorTool action =
+    modifyEditorInterface (Editor.Interface.ModifyTool action)
+
+
+modifyBattle action =
+    update (ModifyBattle action)
+
 modifyHuman action =
-    update (ModifyBattle (Battle.Battle.ModifyPlayer 1 action))
+    modifyBattle (Battle.Battle.ModifyPlayer 1 action)
 
 modifyCursor action =
     modifyHuman (Battle.Player.ModifyCursor action)

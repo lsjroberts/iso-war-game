@@ -67,13 +67,14 @@ getNextUnitWithPoints model =
 
 type Action
     = NoOp
-    | ModifyUnit ID Battle.Unit.Action
     | SelectUnit ID
     | SetSelectedUnit ID
     | UnselectUnit ID
     | UnselectAll
     | SelectUnitAtPosition World.Position.Model
     | MoveUnit ID World.Position.Model
+    | Offset (Float, Float)
+    | ModifyUnit ID Battle.Unit.Action
 
 
 update : Action -> Model -> Model
@@ -81,14 +82,6 @@ update action model =
     case action of
         NoOp ->
             model
-
-        ModifyUnit id unitAction ->
-            let updateUnit (unitID, unitModel) =
-                    if unitID == id
-                        then (unitID, Battle.Unit.update unitAction unitModel)
-                        else (unitID, unitModel)
-            in
-                { model | units <- model.units |> List.map updateUnit }
 
         SelectUnit id ->
             model |> update UnselectAll
@@ -122,6 +115,17 @@ update action model =
                         else (unitID, unitModel)
             in
                 { model | units <- model.units |> List.map moveUnit }
+
+        Offset offset ->
+            model
+
+        ModifyUnit id unitAction ->
+            let updateUnit (unitID, unitModel) =
+                    if unitID == id
+                        then (unitID, Battle.Unit.update unitAction unitModel)
+                        else (unitID, unitModel)
+            in
+                { model | units <- model.units |> List.map updateUnit }
 
 
 -- VIEW

@@ -46,6 +46,7 @@ type Action
     | Click
     | SetType TileType
     | Move World.Position.Model
+    | Offset (Float, Float)
 
 update : Action -> Model -> Model
 update action model =

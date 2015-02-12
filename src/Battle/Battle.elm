@@ -4,18 +4,23 @@ import Debug (log)
 
 import List
 import Signal
-import World.World
 import LocalChannel
-import Battle.Player
-import World.Position
 import Graphics.Collage
+
+import Battle.Army
+import Battle.Player
+
+import World.World
+import World.Position
 
 
 -- MODEL
 
 type alias Model =
     { world : World.World.Model
-    , players : List (ID, Battle.Player.Model) }
+    , players : List (ID, Battle.Player.Model)
+    , offset : (Float, Float)
+    }
 
 type alias ID =
     Int
@@ -24,6 +29,7 @@ default : Model
 default =
     { world = World.World.demo
     , players = [(1, Battle.Player.demoHuman)]
+    , offset = (0, 0)
     }
 
 
@@ -31,6 +37,7 @@ default =
 
 type Action
     = NoOp
+    | Offset (Float, Float)
     | ModifyWorld World.World.Action
     --| ModifyInterface Editor.Interface.Action
     | ModifyPlayer ID Battle.Player.Action
@@ -40,6 +47,17 @@ update action model =
     case action of
         NoOp ->
             model
+
+        Offset (x', y') ->
+            let (x, y) = model.offset
+                x'' = x - (x' * 20)
+                y'' = y + (y' * 20)
+            in
+                { model
+                    | offset <- (x'', y'')
+                }
+--                |> update (ModifyWorld (World.World.Offset offset))
+--                |> update (ModifyPlayer 1 (Battle.Player.ModifyArmy (Battle.Army.Offset offset)))
 
         ModifyWorld worldAction ->
             { model
@@ -88,7 +106,9 @@ view context model =
             --, viewInterface context model.interface
             ++ (model.players |> List.map (viewPlayer context))
     in
-        forms |> Graphics.Collage.group
+        forms
+            |> Graphics.Collage.group
+            |> Graphics.Collage.move model.offset
 
 viewWorld : Context -> World.World.Model -> Graphics.Collage.Form
 viewWorld context world =

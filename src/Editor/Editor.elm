@@ -59,18 +59,6 @@ step ({world, interface} as model) =
             , interface <- interface'
         }
 
-handleMouseMove : (Int, Int) -> Model -> Model
-handleMouseMove (x, y) model =
-    let x' = toFloat x
-        y' = toFloat y
-        pos = World.Position.translateScreenToPos (x', y')
-    in
-        model |> update (ModifyInterface (Editor.Interface.ModifyTool (Editor.Tool.Place pos)))
-
-handleMouseDown : Bool -> Model -> Model
-handleMouseDown isDown model =
-    model |> update (ModifyInterface (Editor.Interface.ModifyTool (Editor.Tool.Paint)))
-
 
 -- VIEW
 
