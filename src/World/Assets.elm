@@ -14,4 +14,10 @@ tiles =
     , hillS   = "/assets/world/tiles/landscapeTiles_098.png"
     , hillSW  = "/assets/world/tiles/landscapeTiles_028.png"
     , hillW   = "/assets/world/tiles/landscapeTiles_091.png"
-    , hillNW  = "/assets/world/tiles/landscapeTiles_021.png" }
+    , hillNW  = "/assets/world/tiles/landscapeTiles_021.png"
+
+    , riverV  = "/assets/world/tiles/landscapeTiles_064.png"
+    , riverH  = "/assets/world/tiles/landscapeTiles_072.png"
+    , riverTurnUpRight = "/assets/world/tiles/landscapeTiles_071.png"
+    , riverTurnLeftUp = "/assets/world/tiles/landscapeTiles_086.png"
+    }

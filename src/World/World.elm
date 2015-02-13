@@ -29,9 +29,26 @@ default =
 demo : Model
 demo =
     { tileList =
-        World.TileList.update
-            (World.TileList.Fill World.Tile.GrassTile (16,16))
-            World.TileList.default
+        World.TileList.default
+            |> World.TileList.update (World.TileList.Fill World.Tile.GrassTile (16,16))
+            |> World.TileList.update (World.TileList.DrawArea World.Tile.RiverVTile
+                    (World.Position.init 3 0 0, World.Position.init 3 4 0)
+            )
+            |> World.TileList.update (World.TileList.Draw World.Tile.RiverTurnUpRightTile
+                    [World.Position.init 3 5 0]
+            )
+            |> World.TileList.update (World.TileList.DrawArea World.Tile.RiverHTile
+                    (World.Position.init 4 5 0, World.Position.init 8 5 0)
+            )
+            |> World.TileList.update (World.TileList.Draw World.Tile.RiverTurnLeftUpTile
+                    [World.Position.init 9 5 0]
+            )
+            |> World.TileList.update (World.TileList.DrawArea World.Tile.RiverVTile
+                    (World.Position.init 9 6 0, World.Position.init 9 16 0)
+            )
+            |> World.TileList.update (World.TileList.DrawArea World.Tile.HillTopTile
+                    (World.Position.init 2 0 0, World.Position.init 2 4 0)
+            )
     , offset = (0, 0)
     }
 

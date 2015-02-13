@@ -26,10 +26,10 @@ type alias Points =
 demo : Model
 demo =
     { units =
-        [ (1, Battle.Unit.infantry (World.Position.init 3 3 0))
-        , (2, Battle.Unit.infantry (World.Position.init 5 3 0))
-        , (3, Battle.Unit.infantry (World.Position.init 4 4 0))
-        , (4, Battle.Unit.infantry (World.Position.init 5 5 0))
+        [ (1, Battle.Unit.infantry (World.Position.init 4 2 0))
+        , (2, Battle.Unit.infantry (World.Position.init 7 2 0))
+        , (3, Battle.Unit.infantry (World.Position.init 6 1 0))
+        , (4, Battle.Unit.infantry (World.Position.init 5 4 0))
         ]
     , nextUnitID = 5
     , selectedUnitID = 0

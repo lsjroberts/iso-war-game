@@ -20,14 +20,28 @@ init : Int -> Int -> Int -> Model
 init x y z =
     { x = x
     , y = y
-    , z = z }
+    , z = z
+    }
 
 area : (Int, Int) -> List Model
 area (w, h) =
     let column x =
-            [0..h-1] |> List.map (\y -> init x y 0)
-                   |> List.reverse
-    in [0..w-1] |> List.concatMap (\x -> column x)
+            [0..h-1]
+                |> List.map (\y -> init x y 0)
+                |> List.reverse
+    in
+        [0..w-1]
+            |> List.concatMap (\x -> column x)
+
+bounds : (Model, Model) -> List Model
+bounds (start, end) =
+    let column x =
+            [(start.y)..(end.y)]
+                |> List.map (\y -> init x y start.z)
+                |> List.reverse
+    in
+        [(start.x)..(end.x)]
+            |> List.concatMap (\x -> column x)
 
 circle : Int -> Model -> List Model
 circle r centre =

@@ -95,6 +95,7 @@ type Action
     = NoOp
     | Insert World.Tile.TileType World.Position.Model
     | Draw World.Tile.TileType (List World.Position.Model)
+    | DrawArea World.Tile.TileType (World.Position.Model, World.Position.Model)
     | Fill World.Tile.TileType (Int, Int)
     | Clear
     | Offset (Float, Float)
@@ -114,12 +115,10 @@ update action model =
                 }
 
         Draw tileType positions ->
-            let tiles' = positions |> List.map (\pos -> World.Tile.init tileType pos)
-            in
-                { model |
-                    tiles <- List.indexedMap (,) tiles',
-                    nextID <- model.nextID + List.length tiles'
-                }
+            model |> draw tileType positions
+
+        DrawArea tileType (start, end) ->
+            update (Draw tileType (World.Position.bounds (start, end))) model
 
         Fill tileType dimensions ->
             let area = World.Position.area dimensions
@@ -148,6 +147,28 @@ update action model =
                 tiles <- List.filter (\(tileID, _) -> tileID /= id) model.tiles
             }
 
+draw : World.Tile.TileType -> List World.Position.Model -> Model -> Model
+draw tileType positions world =
+    let tiles' =
+            world.tiles
+                |> List.partition (\(id, tile) -> if List.member tile.pos positions then True else False)
+                |> drawPartition tileType
+    in
+        { world |
+            tiles <- tiles'
+        }
+
+drawPartition : World.Tile.TileType -> (List IndexedTile, List IndexedTile) -> List IndexedTile
+drawPartition tileType (drawTiles, ignoreTiles) =
+    (drawTiles |> List.map (drawTile tileType))
+    ++
+    (ignoreTiles |> List.filter (\t -> if List.member t drawTiles then False else True))
+
+drawTile : World.Tile.TileType -> IndexedTile -> IndexedTile
+drawTile tileType (tileID, tileModel) =
+    ( tileID
+    , tileModel |> World.Tile.update (World.Tile.SetType tileType)
+    )
 
 -- VIEW
 
@@ -157,8 +178,23 @@ type alias Context =
 
 view : Context -> Model -> Graphics.Collage.Form
 view context ({tiles} as model) =
-    tiles |> List.map (viewTile context)
-          |> Graphics.Collage.group
+    tiles
+        |> List.sortWith tilesViewSorter
+        |> List.map (viewTile context)
+        |> Graphics.Collage.group
+
+tilesViewSorter : IndexedTile -> IndexedTile -> Order
+tilesViewSorter (aID, aModel) (bID, bModel) =
+    let aPos = aModel.pos
+        bPos = bModel.pos
+    in
+        if aPos.y > bPos.y
+            then LT
+            else if aPos.y < bPos.y
+                then GT
+                else if aPos.x < bPos.x
+                    then LT
+                    else GT
 
 viewTile : Context -> (ID, World.Tile.Model) -> Graphics.Collage.Form
 viewTile context (id, tile) =

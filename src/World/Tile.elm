@@ -13,8 +13,25 @@ import Graphics.Element
 
 -- MODEL
 
-type TileType = BlankTile | GrassTile | DirtTile | HillTopTile | HillNTile | HillNETile |
-                HillETile | HillSETile | HillSTile | HillSWTile | HillWTile | HillNWTile
+type TileType
+    = BlankTile
+    | GrassTile
+    | DirtTile
+
+    | HillTopTile
+    | HillNTile
+    | HillNETile
+    | HillETile
+    | HillSETile
+    | HillSTile
+    | HillSWTile
+    | HillWTile
+    | HillNWTile
+
+    | RiverVTile
+    | RiverHTile
+    | RiverTurnUpRightTile
+    | RiverTurnLeftUpTile
 
 type alias Model =
     { tileType : TileType
@@ -75,7 +92,7 @@ view context ({pos} as model) =
         model
             |> image
             |> Graphics.Collage.toForm
-            |> Graphics.Collage.move (x,y)
+            |> Graphics.Collage.move (x, y)
 
 --          |> Graphics.Input.clickable (LocalChannel.send context.actionChannel Click)
 --          |> Graphics.Input.hoverable (\on -> LocalChannel.send context.actionChannel (if on then HoverIn else HoverOut))
@@ -95,6 +112,7 @@ tilePath tileType =
             BlankTile   -> tiles.blank
             GrassTile   -> tiles.grass
             DirtTile    -> tiles.dirt
+
             HillTopTile -> tiles.hillTop
             HillNTile   -> tiles.hillN
             HillNETile  -> tiles.hillNE
@@ -104,3 +122,8 @@ tilePath tileType =
             HillSWTile  -> tiles.hillSW
             HillWTile   -> tiles.hillW
             HillNWTile  -> tiles.hillNW
+
+            RiverVTile  -> tiles.riverV
+            RiverHTile  -> tiles.riverH
+            RiverTurnUpRightTile -> tiles.riverTurnUpRight
+            RiverTurnLeftUpTile -> tiles.riverTurnLeftUp
