@@ -52,10 +52,15 @@ demo =
     , offset = (0, 0)
     }
 
-areaWithCost : Model -> Int -> World.Position.Model -> List (Int, World.Position.Model)
-areaWithCost world points centre =
-    World.TileList.areaWithCost world.tileList points centre
-        |> List.map (\(id, tile) -> (id, tile.pos))
+--areaWithCost : Model -> Int -> World.Position.Model -> List (Int, World.Position.Model)
+--areaWithCost world points centre =
+--    World.TileList.areaWithCost world.tileList points centre
+--        |> List.map (\(id, tile) -> (id, tile.pos))
+
+getDistanceGrid : Model -> Int -> World.Position.Model -> List (Int, World.Position.Model)
+getDistanceGrid world points start =
+    World.TileList.getDistanceGridFromPos start world.tileList
+        |> List.map (\(cost, tile) -> (cost, tile.pos))
 
 
 -- UPDATE

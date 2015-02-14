@@ -62,7 +62,7 @@ update action model =
                 }
 
         AreaWithCost cursorType points world centre ->
-            let area = World.World.areaWithCost world points centre
+            let area = World.World.getDistanceGrid world points centre
                 cursors' = area |> List.map (\(cost, pos) -> Battle.Cursor.init cursorType pos)
             in
                 { model

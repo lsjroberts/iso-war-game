@@ -4,10 +4,13 @@ import Debug (log)
 
 import List
 import Signal
-import World.Tile
 import LocalChannel
-import World.Position
 import Graphics.Collage
+
+import Helpers
+
+import World.Tile
+import World.Position
 
 -- MODEL
 
@@ -33,53 +36,109 @@ getTileAtPos model pos =
         |> List.filter (\(id, tile) -> if tile.pos == pos then True else False)
         |> List.head
 
-areaWithCost : Model -> Int -> World.Position.Model -> List CostedTile
-areaWithCost ({tiles} as model) points fromPos =
-    let (fromID, fromTile) = getTileAtPos model fromPos
+getDistanceGridFromPos : World.Position.Model -> Model -> List CostedTile
+getDistanceGridFromPos pos model =
+    let start = getTileAtPos model pos
     in
-        tiles
-            |> initCosts fromTile
-            |> fillCosts (0, fromTile)
-            |> List.filter (\(cost, tile) -> if cost <= points then True else False)
+        getDistanceGrid start model
 
-initCosts : World.Tile.Model -> List IndexedTile -> List CostedTile
-initCosts start tiles =
-    tiles
-        |> List.map (\(id, tile) ->
-            if tile == start
-                then (0, tile)
-                else (999, tile)
-        )
-
-fillCosts : CostedTile -> List CostedTile -> List CostedTile
-fillCosts first tiles =
-    fillNeighbourCosts first tiles
---        |> List.concatMap (\n -> fillNeighbourCosts n tiles)
-
-fillNeighbourCosts : CostedTile -> List CostedTile -> List CostedTile
-fillNeighbourCosts current tiles =
-    let neighbours =
-            tiles
-                |> List.filter (isCostedNeighbour current)
+getDistanceGrid : IndexedTile -> Model -> List CostedTile
+getDistanceGrid start model =
+    let (startID, startTile) = start
     in
-        neighbours
-            |> List.map (setCost current)
---            |> List.map (\tile -> fillNeighbourCosts tile tiles)
+        visitFrontier model 0 (getNeighbours start model.tiles) [(0, startTile)]
 
-setCost : CostedTile -> CostedTile -> CostedTile
-setCost (currentCost, currentTile) (targetCost, targetTile) =
-    let newCost = currentCost + 1
+visitFrontier : Model -> Int -> List IndexedTile -> List CostedTile -> List CostedTile
+visitFrontier model cost frontier visited =
+    if List.length frontier > 0
+        then frontier |> List.concatMap (visitFrontierTile model cost visited)
+        else []
+
+visitFrontierTile : Model -> Int -> List CostedTile -> IndexedTile -> List CostedTile
+visitFrontierTile model cost visited next =
+    let grid = model.tiles |> List.filter (\t -> not (List.member t visited))
+        nextCost = cost + 1
     in
-        if newCost < targetCost
-            then (newCost, targetTile)
-            else (targetCost, targetTile)
+        if not (List.member next visited)
+            then
+                if cost < 3
+                    then
+                        next :: (visitFrontier model nextCost (getNeighbours next grid) (next :: visited))
+                    else []
+            else []
 
-isCostedNeighbour : CostedTile -> CostedTile -> Bool
-isCostedNeighbour (aCost, aTile) (bCost, bTile) =
-    isNeighbour aTile bTile
+--getShortestPath : IndexedTile -> IndexedTile -> List IndexedTile -> List CostedTile
+--getShortestPath start finish grid =
+--    let helper frontier visited =
+--            if | List.length frontier > 0 ->
+--                    helper (getNeighbours (List.head frontier) (List.filter grid)
+--               | otherwise ->
+--                    visited
+--    in
+--        helper (getNeighbours start grid) []
 
-isNeighbour : World.Tile.Model -> World.Tile.Model -> Bool
-isNeighbour tile check =
+--getShortestPathNeighbours : List IndexedTile -> List IndexedTile -> List IndexedTile
+--getShortestPathNeighbours neighbours visited =
+--    let current = List.head
+--    if | List.length frontier == 0 ->
+--                    visited
+--               | otherwise ->
+--                    helper (getNeighbours (List.head frontier) (List.filter grid)
+
+getNeighbours : IndexedTile -> List IndexedTile -> List IndexedTile
+getNeighbours tile grid =
+    grid |> List.filter (isNeighbour tile)
+
+
+
+
+--areaWithCost : Model -> Int -> World.Position.Model -> List CostedTile
+--areaWithCost ({tiles} as model) points fromPos =
+--    let (fromID, fromTile) = getTileAtPos model fromPos
+--    in
+--        tiles
+--            |> initCosts fromTile
+--            |> fillCosts (0, fromTile)
+--            |> List.filter (\(cost, tile) -> if cost <= points then True else False)
+
+--initCosts : World.Tile.Model -> List IndexedTile -> List CostedTile
+--initCosts start tiles =
+--    tiles
+--        |> List.map (\(id, tile) ->
+--            if tile == start
+--                then (0, tile)
+--                else (999, tile)
+--        )
+
+--fillCosts : CostedTile -> List CostedTile -> List CostedTile
+--fillCosts first tiles =
+--    fillNeighbourCosts first tiles
+----        |> List.concatMap (\n -> fillNeighbourCosts n tiles)
+
+--fillNeighbourCosts : CostedTile -> List CostedTile -> List CostedTile
+--fillNeighbourCosts current tiles =
+--    let neighbours =
+--            tiles
+--                |> List.filter (isCostedNeighbour current)
+--    in
+--        neighbours
+--            |> List.map (setCost current)
+----            |> List.map (\tile -> fillNeighbourCosts tile tiles)
+
+--setCost : CostedTile -> CostedTile -> CostedTile
+--setCost (currentCost, currentTile) (targetCost, targetTile) =
+--    let newCost = currentCost + 1
+--    in
+--        if newCost < targetCost
+--            then (newCost, targetTile)
+--            else (targetCost, targetTile)
+
+--isCostedNeighbour : CostedTile -> CostedTile -> Bool
+--isCostedNeighbour (aCost, aTile) (bCost, bTile) =
+--    isNeighbour aTile bTile
+
+isNeighbour : IndexedTile -> IndexedTile -> Bool
+isNeighbour (tileID, tile) (checkID, check) =
     let tilePos = tile.pos
         checkPos = check.pos
         diffX = tilePos.x - checkPos.x |> abs
@@ -88,6 +147,7 @@ isNeighbour tile check =
         if ((diffX == 0 && diffY == 1) || (diffX == 1 && diffY == 0))
             then True
             else False
+
 
 -- UPDATE
 

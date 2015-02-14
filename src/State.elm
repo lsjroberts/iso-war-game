@@ -189,7 +189,7 @@ input : Signal.Signal Action
 input =
     Signal.mergeMany
         [ Signal.subscribe actionChannel
-        , Signal.map NearEdge (Signal.sampleOn (Time.fps 30) (Mouse.position |> Signal.map2 (Helpers.nearEdge 40) Window.dimensions))
+        --, Signal.map NearEdge (Signal.sampleOn (Time.fps 30) (Mouse.position |> Signal.map2 (Helpers.nearEdge 40) Window.dimensions))
         , Signal.map MouseMove (Mouse.position)
         , Signal.map MouseDown (Mouse.isDown)
         , Signal.map KeyPressed (Keyboard.lastPressed)

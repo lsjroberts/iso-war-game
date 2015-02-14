@@ -28,6 +28,10 @@ type alias Model =
 type alias Points =
     Int
 
+unitWidth = 131
+unitHeight = 131
+zoom = 0.5
+
 init : UnitType -> World.Position.Model -> Model
 init unitType pos =
     { unitType = unitType
@@ -87,10 +91,6 @@ isSelected : Model -> Bool
 isSelected model =
     model.selected
 
-unitWidth = 131
-unitHeight = 131
-zoom = 0.5
-
 
 -- UPDATE
 
@@ -118,14 +118,6 @@ update action model =
 
         Place pos ->
             { model | pos <- pos }
-
---handleKeyPressed : Int -> Model -> Model
---handleKeyPressed key model =
---    let action =
---            if | key == 13 -> ToggleSelect
---               | otherwise -> NoOp
---    in
---        model |> update action
 
 
 -- VIEW
